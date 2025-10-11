@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>help - SmartHealth</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+      <style>
+
+        
+
+    /* ===== Section d'Urgence Médicale ===== */
+    .urgence-section {
+        background: #fafbfc; /* Fond clair pour la section */
+        border-radius: 18px;
+        box-shadow: 0 2px 12px rgba(7,52,92,0.07);
+        padding: 32px 18px 32px 18px;
+        margin: 40px auto 32px auto;
+        max-width: 1200px;
+    }
+    /* Titre principal */
+    .urgence-title {
+        font-size: 2em;
+        color: #1f6f54;
+        font-weight: bold;
+        margin-bottom: 6px;
+        text-align: left;
+    }
+    /* Description sous le titre */
+    .urgence-desc {
+        color: #888;
+        margin-bottom: 22px;
+        font-size: 1.05em;
+    }
+    /* Bloc principal d'appel d'urgence */
+    .urgence-bloc {
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(255,0,0,0.04);
+        padding: 18px 18px 22px 18px;
+        margin-bottom: 28px;
+    }
+    /* Label d'appel d'urgence */
+    .urgence-label {
+        color: #e53935;
+        font-weight: bold;
+        font-size: 1.15em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+    /* Boutons d'urgence */
+    .urgence-btns {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+    .urgence-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.1em;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 14px 32px;
+        text-decoration: none;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.08);
+        transition: background 0.2s, transform 0.2s;
+    }
+    .urgence-btn.maroc {
+        background: #e53935; /* Rouge SAMU Maroc */
+    }
+    .urgence-btn.maroc:hover {
+        background: #b71c1c;
+        transform: scale(1.04);
+    }
+    .urgence-btn.europe {
+        background: #ff9800; /* Orange Urgence Européenne */
+    }
+    .urgence-btn.europe:hover {
+        background: #e65100;
+        transform: scale(1.04);
+    }
+    .urgence-btn.mali {
+        background: #4caf50; /* Vert Urgence Mali */
+    }
+    .urgence-btn.mali:hover {
+        background: #388e3c;
+        transform: scale(1.04);
+    }
+    /* Bloc des services spécialisés */
+    .urgence-services {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+    .urgence-service {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.06);
+        padding: 16px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex: 1 1 260px;
+        min-width: 220px;
+        margin-bottom: 0;
+    }
+    .urgence-service i {
+        color: #e53935;
+        font-size: 1.5em;
+        margin-top: 4px;
+    }
+    .urgence-service strong {
+        color: #1f6f54;
+        font-size: 1.08em;
+    }
+    .urgence-service-desc {
+        color: #555;
+        font-size: 0.98em;
+    }
+    .urgence-service-num {
+        color: #e53935;
+        font-weight: bold;
+        font-size: 1.08em;
+    }
+    .urgence-service-num.europe {
+        color: #ff9800;
+    }
+    @media (max-width: 700px) {
+        .urgence-services {
+            flex-direction: column;
+        }
+    }
+
+    /* ===== Section Premiers secours ===== */
+     .secours-section {
+                background: #fff;
+                border-radius: 18px;
+                box-shadow: 0 2px 12px rgba(7,52,92,0.07);
+                padding: 28px 18px 28px 18px;
+                margin: 40px auto 32px auto;
+                max-width: 1200px;
+            }
+            /* Titre avec icône coeur vert */
+            .secours-title {
+                display: flex;
+                align-items: center;
+                font-size: 1.35em;
+                font-weight: bold;
+                color: #1f6f54;
+                margin-bottom: 18px;
+                gap: 10px;
+            }
+            .secours-icon i {
+                color: #1f6f54;
+                font-size: 1.3em;
+            }
+            /* Grille responsive 2 colonnes */
+            .secours-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            @media (max-width: 700px) {
+                .secours-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            /* Carte de geste de secours */
+            .secours-card {
+                background: #fafbfc;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(7,52,92,0.04);
+                padding: 16px 18px;
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .secours-card-icon i {
+                color: #1f6f54;
+                font-size: 1.2em;
+                margin-top: 4px;
+            }
+            .secours-card strong {
+                color: #1f6f54;
+                font-size: 1.08em;
+            }
+            .secours-desc {
+                color: #555;
+                font-size: 0.98em;
+            }
+    </style>
+
+    </head>
+<body>
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+         
+        <i class="fas fa-hospital-alt"></i>
+        <div class="logo">SmartHealth</div>
+        
+        <nav>
+            <a href="index.html" >Accueil</a>
+            <a href="about.html"> About Us</a>
+            <a href="contact.html"> Contact</a>
+            <a href="help.html" class="active"> Aide</a>
+            <span class="spacer"></span>
+            <a href="login.html" class="Login" > Login</a>
+            <a href="inscription.html" class="inscription">Sign in</a>
+
+        </nav>
+    </aside>
+
+<main>
+    <section class="help-section">
+        <h1>Aide et Support</h1>
+        <p>Bienvenue sur la page d'aide de SmartHealth. Si vous avez des questions ou besoin d'assistance, veuillez consulter les sections ci-dessous.</p>
+
+        <h2>Questions Fréquemment Posées (FAQ)</h2>
+        <ul class="faq-list">
+            <li><strong>Comment créer un compte ?</strong> Vous pouvez créer un compte en cliquant sur le bouton "S'inscrire" sur la page d'accueil.</li>
+            <li><strong>Comment prendre rendez-vous avec un médecin ?</strong> Utilisez la section "Rendez-vous" dans votre tableau de bord pour planifier une consultation.</li>
+            <li><strong>Comment accéder à mes documents médicaux ?</strong> Vos documents sont disponibles dans la section "Documents" de votre profil.</li>
+        </ul>
+
+        <h2>Contactez-nous</h2>
+        <p>Si vous avez besoin d'une assistance supplémentaire, veuillez nous contacter à l'adresse email suivante :</p>
+        </section>
+
+   
+
+    <!-- Section Appels d'Urgence Médicale -->
+    <section class="urgence-section">
+        <!-- Titre principal de la section -->
+        <h2 class="urgence-title">Hub d'Urgence Médicale</h2>
+        <p class="urgence-desc">Services d'urgence et premiers secours au Maroc</p>
+
+        <!-- Bloc d'appel d'urgence immédiat -->
+        <div class="urgence-bloc">
+            <div class="urgence-label">
+                <i class="fas fa-phone-alt"></i>
+                Appel d'urgence immédiat
+            </div>
+            <div class="urgence-btns">
+                <!-- Bouton SAMU Maroc -->
+                <a href="tel:15" class="urgence-btn maroc">
+                    <i class="fas fa-phone-alt"></i> SAMU Maroc (15)
+                </a>
+                <!-- Bouton Urgence Européenne -->
+                <a href="tel:112" class="urgence-btn europe">
+                    <i class="fas fa-phone-alt"></i> Urgence Européenne (112)
+                </a>
+                <a href="tel:20225002" class="urgence-btn mali">
+                    <i class="fas fa-phone-alt"></i> Urgence Mali (20225002)
+                </a>
+            </div>
+        </div>
+
+        <!-- Bloc de services spécialisés -->
+        <div class="urgence-services">
+            <div class="urgence-service">
+                <i class="fas fa-lungs"></i>
+                <div>
+                    <strong>SAMU Respiratoire</strong><br>
+                    <span class="urgence-service-desc">Service dédié aux patients présentant des symptômes respiratoires, de la fièvre et de la toux.</span><br>
+                    <span class="urgence-service-num">141</span>
+                </div>
+            </div>
+            <div class="urgence-service">
+                <i class="fas fa-virus"></i>
+                <div>
+                    <strong>Veille épidémiologique</strong><br>
+                    <span class="urgence-service-desc">Service d'information et de suivi des situations épidémiologiques.</span><br>
+                    <span class="urgence-service-num europe">080 100 47 47</span>
+                </div>
+            </div>
+        </div>
+        <div>
+         
+    </section>
+         <!-- Section Premiers secours -->
+            <section class="secours-section">
+                <!-- Titre avec icône -->
+                <div class="secours-title">
+                    <span class="secours-icon"><i class="fas fa-heartbeat"></i></span>
+                    Premiers secours
+                </div>
+                <!-- Grille des gestes de premiers secours -->
+                <div class="secours-grid">
+                    <div class="secours-card">
+                        <span class="secours-card-icon"><i class="fas fa-heartbeat"></i></span>
+                        <div>
+                            <strong>PLS</strong><br>
+                            <span class="secours-desc">Placez la personne sur le côté, tête en arrière.</span>
+                        </div>
+                    </div>
+                    <div class="secours-card">
+                        <span class="secours-card-icon"><i class="fas fa-heartbeat"></i></span>
+                        <div>
+                            <strong>Massage cardiaque</strong><br>
+                            <span class="secours-desc">100-120 compressions/min, profondeur 5-6cm.</span>
+                        </div>
+                    </div>
+                    <div class="secours-card">
+                        <span class="secours-card-icon"><i class="fas fa-heartbeat"></i></span>
+                        <div>
+                            <strong>Étouffement</strong><br>
+                            <span class="secours-desc">5 claques dans le dos, puis 5 compressions abdominales.</span>
+                        </div>
+                    </div>
+                    <div class="secours-card">
+                        <span class="secours-card-icon"><i class="fas fa-heartbeat"></i></span>
+                        <div>
+                            <strong>Brûlure</strong><br>
+                            <span class="secours-desc">Rincer à l'eau froide 15 min, couvrir sans coller.</span>
+                        </div>
+                    </div>
+                    <div class="secours-card">
+                        <span class="secours-card-icon"><i class="fas fa-heartbeat"></i></span>
+                        <div>
+                            <strong>Piqûre de scorpion</strong><br>
+                            <span class="secours-desc">Immobiliser le membre, ne pas faire de garrot, appeler immédiatement le 15.</span>
+                        </div>
+                    </div>
+                    <div class="secours-card">
+                        <span class="secours-card-icon"><i class="fas fa-heartbeat"></i></span>
+                        <div>
+                            <strong>Coup de chaleur</strong><br>
+                            <span class="secours-desc">Mettre la personne à l'ombre, la rafraîchir, lui donner à boire si consciente.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CSS interne pour la section premiers secours, bien commenté -->
+     
+
+    </section>
+
+
+    <!-- Le Footer  -->
+
+        <footer class="main-footer">
+                    <div class="footer-content">
+                        <span class="footer-logo">SmartHealth</span>
+                        <span class="footer-links">
+                            <a href="#">Mentions légales</a> ·
+                            <a href="#">Confidentialité</a> ·
+                            <a href="#">Contact</a>
+                        </span>
+                        <span class="footer-socials">
+                            <a href="#" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                            
+                            </a>
+                            <a href="#" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="#" title="YouTube">    
+                            <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="#" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i> 
+                            </a>
+                           
+                        </span>
+                        <div class="footer-copy">&copy; 2025 SmartHealth. Tous droits réservés.</div>
+                    </div>
+                </footer>
+    
+</main>
+
+</body>
+</html>

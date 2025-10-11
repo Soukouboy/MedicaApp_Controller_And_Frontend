@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Compte Rendu du Rendez-vous | SmartHealth</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .compterendu-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(31, 111, 84, 0.10);
+            padding: 36px 32px 32px 32px;
+            max-width: 520px;
+            min-width: 320px;
+            margin: 40px auto 0 auto;
+        }
+        .compterendu-card h2 {
+            color: #1f6f54;
+            font-size: 1.5em;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .compterendu-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #07345c;
+            font-weight: 600;
+        }
+        .compterendu-form textarea {
+            width: 100%;
+            padding: 12px 10px;
+            border-radius: 8px;
+            border: 1.5px solid #2f8f6f;
+            font-size: 1.08rem;
+            background: #f4f9f4;
+            color: #1f6f54;
+            margin-bottom: 18px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .compterendu-form textarea:focus {
+            border: 2px solid #1f6f54;
+        }
+        .compterendu-form button {
+            background: linear-gradient(90deg, #1f6f54 60%, #2f8f6f 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #1f6f5422;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .compterendu-form button:hover {
+            background: linear-gradient(90deg, #2f8f6f 60%, #1f6f54 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .success-msg {
+            color: #1f6f54;
+            background: #e6f7f2;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 18px;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="compterendu-card">
+        <h2><i class="fa-solid fa-file-medical"></i> Compte rendu du rendez-vous</h2>
+        <form class="compterendu-form" id="compteRenduForm">
+            <label for="compteRendu">Compte rendu :</label>
+            <textarea id="compteRendu" name="compteRendu" rows="8" placeholder="Écrire le compte rendu ici..." required></textarea>
+            <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer le compte rendu</button>
+        </form>
+        <div id="compteRenduSuccess" class="success-msg" style="display:none;"></div>
+    </div>
+    <script>
+        document.getElementById('compteRenduForm').onsubmit = function(e) {
+            e.preventDefault();
+            const compteRendu = document.getElementById('compteRendu').value;
+            // Ici, tu peux envoyer le compte rendu à l'API
+            document.getElementById('compteRenduSuccess').style.display = 'block';
+            document.getElementById('compteRenduSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Compte rendu enregistré !`;
+            this.reset();
+        };
+    </script>
+</body>
+</html>

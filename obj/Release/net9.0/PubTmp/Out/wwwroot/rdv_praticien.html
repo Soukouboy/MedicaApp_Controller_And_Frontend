@@ -1,0 +1,116 @@
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Icônes -->
+</head>
+
+      
+
+            <!-- Zone contenu -->
+            <div class="content">
+                <!-- Section Rendez-vous -->
+                <section class="patient-overview">
+                    <h2><i class="fas fa-calendar-check"></i> Mes Rendez-vous</h2>
+
+                    <!-- Tableau des RDV -->
+                    <div class="patient-info">
+                        <div class="patient-card">
+                            <div class="patient-header">
+                                <h3>Liste</h3>
+                            </div>
+
+                            <!-- Le tableau qui recevra les données -->
+                            <div style="overflow-x:auto;">
+                                <table class="table" style="width:100%; border-collapse:collapse;">
+                                    <thead>
+                                        <tr style="background:#e9ecef;">
+                                            <th style="padding:10px; text-align:left;">#</th>
+                                            <th style="padding:10px; text-align:left;">Date & Heure</th>
+                                            <th style="padding:10px; text-align:left;">Durée (h)</th>
+                                            <th style="padding:10px; text-align:left;">Type</th>
+                                            <th style="padding:10px; text-align:left;">Patient</th>
+                                            <th style="padding:10px; text-align:left;">Paiement</th>
+                                            <th style="padding:10px; text-align:left;">Statut</th>
+                                            <th style="padding:10px; text-align: left;">Actions</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rdvTable">
+                                        <!-- Lignes insérées par JS -->
+                                        <tr><td colspan="6" style="padding:12px;">Chargement…</td></tr>
+                                    </tbody>
+                                </table>
+
+                                
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+                                <style>
+                                    /* Calendrier personnalisé pour SmartHealth */
+                                    #calendarContainer {
+                                        display: none;
+                                        margin: 32px auto 0 auto;
+                                        max-width: 400px;
+                                        background: #f4f9f4;
+                                        border-radius: 18px;
+                                        box-shadow: 0 4px 24px rgba(31, 111, 84, 0.10), 0 1.5px 6px #2f8f6f22;
+                                        padding: 32px 24px 24px 24px;
+                                        text-align: center;
+                                        border: 2px solid #2f8f6f;
+                                        position: relative;
+                                        z-index: 10;
+                                    }
+                                    #calendarContainer label {
+                                        display: block;
+                                        font-size: 1.15rem;
+                                        color: #1f6f54;
+                                        margin-bottom: 18px;
+                                        font-weight: 600;
+                                    }
+                                    #newDateTime {
+                                        width: 90%;
+                                        padding: 12px 10px;
+                                        border-radius: 8px;
+                                        border: 1.5px solid #2f8f6f;
+                                        font-size: 1.08rem;
+                                        background: #fff;
+                                        color: #1f6f54;
+                                        margin-bottom: 22px;
+                                        outline: none;
+                                        transition: border 0.2s;
+                                    }
+                                    #newDateTime:focus {
+                                        border: 2px solid #1f6f54;
+                                    }
+                                    #saveNewDateTime {
+                                        background: linear-gradient(90deg, #1f6f54 60%, #2f8f6f 100%);
+                                        color: #fff;
+                                        border: none;
+                                        border-radius: 8px;
+                                        padding: 12px 32px;
+                                        font-size: 1.08rem;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        box-shadow: 0 2px 8px #1f6f5422;
+                                        transition: background 0.2s, transform 0.1s;
+                                    }
+                                    #saveNewDateTime:hover {
+                                        background: linear-gradient(90deg, #2f8f6f 60%, #1f6f54 100%);
+                                        transform: translateY(-2px) scale(1.03);
+                                    }
+                                </style>
+                                <div id="calendarContainer">
+                                    <label for="newDateTime"><i class="fa-regular fa-calendar-days"></i> Choisissez une nouvelle date et heure :</label>
+                                    <input type="datetime-local" id="newDateTime" min="{{minDate}}">
+                                    <br>
+                                    <button id="saveNewDateTime"><i class="fa-solid fa-check"></i> Enregistrer</button>
+                                </div>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

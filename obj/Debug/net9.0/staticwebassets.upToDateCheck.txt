@@ -1,0 +1,58 @@
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dash-med-style.css
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dashboard-patient.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\help.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\contact.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\praticien-dashboard.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\compte-rendu.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\rdv.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dash-patient.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\profil.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\index.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\about.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\login.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dashboard-medecin.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\symtomes.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\page-document.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\login.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\patient-dashboard.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\ordonnance.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dash-med.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\inscription.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\rdv_praticien.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\document.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Prendre-rdv.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\index-style.css
+wwwroot\about.html
+wwwroot\Certificate.pdf
+wwwroot\compte-rendu.html
+wwwroot\contact.html
+wwwroot\dashboard-medecin.html
+wwwroot\dashboard-patient.html
+wwwroot\dash-med.js
+wwwroot\dash-med-style.css
+wwwroot\dash-patient.js
+wwwroot\doctor.jpeg
+wwwroot\document.html
+wwwroot\dsk.jpg
+wwwroot\exemple formulaire.png
+wwwroot\fonctionnalites_dashboard.png
+wwwroot\help.html
+wwwroot\icone rdv.png
+wwwroot\index.html
+wwwroot\index-style.css
+wwwroot\inscription.html
+wwwroot\login.html
+wwwroot\login.js
+wwwroot\logo.png
+wwwroot\ordonnance.html
+wwwroot\ordonnance.jpeg
+wwwroot\ordonnance-medicale.webp
+wwwroot\page-document.html
+wwwroot\patient-dashboard.js
+wwwroot\praticien-dashboard.js
+wwwroot\Prendre-rdv.html
+wwwroot\prise-rdv.png
+wwwroot\profil.html
+wwwroot\rdv.html
+wwwroot\rdv_praticien.html
+wwwroot\symtomes.html

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle Ordonnance | SmartHealth</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .ordonnance-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(31, 111, 84, 0.10);
+            padding: 36px 32px 32px 32px;
+            max-width: 520px;
+            min-width: 320px;
+            margin: 40px auto 0 auto;
+        }
+        .ordonnance-card h2 {
+            color: #1f6f54;
+            font-size: 1.5em;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .ordonnance-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #07345c;
+            font-weight: 600;
+        }
+        .ordonnance-form select, .ordonnance-form input[type='number'], .ordonnance-form textarea {
+            width: 100%;
+            padding: 12px 10px;
+            border-radius: 8px;
+            border: 1.5px solid #2f8f6f;
+            font-size: 1.08rem;
+            background: #f4f9f4;
+            color: #1f6f54;
+            margin-bottom: 18px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .ordonnance-form select:focus, .ordonnance-form input[type='number']:focus, .ordonnance-form textarea:focus {
+            border: 2px solid #1f6f54;
+        }
+        .ordonnance-form button {
+            background: linear-gradient(90deg, #1f6f54 60%, #2f8f6f 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #1f6f5422;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .ordonnance-form button:hover {
+            background: linear-gradient(90deg, #2f8f6f 60%, #1f6f54 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .med-list {
+            margin-bottom: 18px;
+        }
+        .med-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .med-row select, .med-row input {
+            flex: 1;
+        }
+        .med-row .remove-med {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .add-med-btn {
+            background: #2f8f6f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-size: 1em;
+            margin-bottom: 18px;
+            cursor: pointer;
+        }
+        .add-med-btn[disabled] {
+            background: #b2b2b2;
+            cursor: not-allowed;
+        }
+        .add-med-btn:hover:enabled {
+            background: #1f6f54;
+        }
+        .success-msg {
+            color: #1f6f54;
+            background: #e6f7f2;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 18px;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        .loader {
+            text-align: center;
+            color: #2f8f6f;
+            font-size: 1.1em;
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ordonnance-card">
+        <h2><i class="fa-solid fa-prescription-bottle-medical"></i> Nouvelle ordonnance</h2>
+        <div id="loader" class="loader">Chargement des médicaments...</div>
+        <form class="ordonnance-form" id="ordonnanceForm" style="display:none;">
+            <div class="med-list" id="medList">
+                <label>Médicaments à prescrire :</label>
+                <!-- Les lignes de médicaments seront ajoutées ici -->
+            </div>
+            <button type="button" class="add-med-btn" id="addMedBtn" disabled aria-label="Ajouter un médicament"><i class="fa-solid fa-plus"></i> Ajouter un médicament</button>
+            <button type="submit" id="submitOrdonnance"><i class="fa-solid fa-check"></i> Valider l'ordonnance</button>
+        </form>
+        <div id="ordonnanceSuccess" class="success-msg" style="display:none;"></div>
+    </div>
+     <script>
+        let medicaments = [];
+        function createMedRow() {
+            const row = document.createElement('div');
+            row.className = 'med-row';
+            row.innerHTML = `
+                <select required aria-label="Choisir un médicament">
+                    <option value="">Choisir un médicament...</option>
+                    ${medicaments.map(med => `<option value="${med.idMedoc}">${med.nom}</option>`).join('')}
+                </select>
+                <input type="number" min="1" placeholder="Quantité" required aria-label="Quantité à prescrire">
+                <input type="number" min="1" placeholder="Nb d'utilisations/jour" required aria-label="Nombre d'utilisations par jour">
+                <button type="button" class="remove-med" title="Retirer" aria-label="Retirer ce médicament"><i class="fa fa-times"></i></button>
+            `;
+            row.querySelector('.remove-med').onclick = () => row.remove();
+            return row;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const addBtn = document.getElementById('addMedBtn');
+            const loader = document.getElementById('loader');
+            const form = document.getElementById('ordonnanceForm');
+            try {
+                const response = await fetch(`http://localhost:5103/api/Medicament`);
+                if (!response.ok) throw new Error("Erreur lors de la récupération des médicaments");
+                medicaments = await response.json();
+                window.medicaments = medicaments;
+                // Ajout d'une ligne par défaut après chargement
+                document.getElementById('medList').appendChild(createMedRow());
+                addBtn.disabled = false;
+                loader.style.display = 'none';
+                form.style.display = '';
+            } catch (err) {
+                loader.textContent = "Impossible de charger les médicaments.";
+                addBtn.disabled = true;
+                form.style.display = 'none';
+                console.error("Erreur :", err);
+                alert("Impossible de charger les médicaments.");
+            }
+        });
+
+        document.getElementById('addMedBtn').onclick = function() {
+            document.getElementById('medList').appendChild(createMedRow());
+        };
+
+        document.getElementById('ordonnanceForm').onsubmit = function(e) {
+            e.preventDefault();
+            // Récupérer les données
+            const meds = [];
+            document.querySelectorAll('.med-row').forEach(row => {
+                const select = row.querySelector('select');
+                const quantite = row.querySelector('input[type="number"]:nth-of-type(1)');
+                const nbUtil = row.querySelector('input[type="number"]:nth-of-type(2)');
+                if (select.value && quantite.value && nbUtil.value) {
+                    meds.push({
+                        medicamentId: select.value,
+                        quantite: quantite.value,
+                        nbUtilisation: nbUtil.value
+                    });
+                }
+            });
+            if (meds.length === 0) {
+                alert("Veuillez ajouter au moins un médicament à l'ordonnance.");
+                return;
+            }
+            // Ici, tu peux envoyer les données à l'API
+            document.getElementById('ordonnanceSuccess').style.display = 'block';
+            document.getElementById('ordonnanceSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Ordonnance enregistrée avec succès !`;
+            this.reset();
+            // Réajouter une ligne vide
+            document.getElementById('medList').innerHTML = '<label>Médicaments à prescrire :</label>';
+            document.getElementById('medList').appendChild(createMedRow());
+            const btn_submit=document.getElementById("submitOrdonnance");
+            if(btn_submit){
+                btn_submit.addEventListener("click",async ()=>{
+                    try{
+                        const response=await fetch("http://localhost:5103/api/Ordonnance",{
+                            method:"POST",
+                            headers:{"Content-Type":"application/json"},
+                            body:JSON.stringify({
+                                medicaments:meds,
+                                date: new Date().now(),
+                                renouvellementsRestants:2,
+                                id_rendezvous:1
+                            })
+                        });
+                        if(!response.ok) throw new Error("Erreur lors de l'enregistrement de l'ordonnance");
+                        const result=await response.json();
+                        document.getElementById('ordonnanceSuccess').style.display = 'block';
+                        document.getElementById('ordonnanceSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Ordonnance enregistrée avec succès !`;
+                        this.reset();
+                        // Réajouter une ligne vide
+                        document.getElementById('medList').innerHTML = '<label>Médicaments à prescrire :</label>';
+                        document.getElementById('medList').appendChild(createMedRow());
+                    }catch(err){
+                        console.error("Erreur :", err);
+                        alert("Erreur lors de l'enregistrement de l'ordonnance.");
+                    }
+
+                 });
+            }
+        };
+    </script>
+</body>
+</html>

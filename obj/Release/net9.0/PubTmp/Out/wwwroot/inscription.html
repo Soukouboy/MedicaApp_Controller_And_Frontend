@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Métadonnées essentielles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Patient | Plateforme Médicale</title>
+    
+    <!-- Intégration des polices et icônes -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="icon" href="logo.png" type="image/x-icon">
+    <!-- Style CSS -->
+    <style>
+        /* Reset et base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+            line-height: 1.6;
+        }
+        
+        /* Conteneur principal */
+        .registration-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* En-tête */
+        .registration-header {
+            background: #2f8f6f;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .registration-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .registration-header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        /* Corps du formulaire */
+        .registration-body {
+            padding: 30px;
+        }
+        
+        /* Progress bar (optionnelle) */
+        .progress-bar {
+            display: flex;
+            margin-bottom: 30px;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .progress-step.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .progress-step.completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .progress-bar:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #e9ecef;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-completed {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            background: #28a745;
+            transform: translateY(-50%);
+            z-index: 1;
+            transition: width 0.3s ease;
+        }
+        
+        /* Groupes de formulaire */
+        .form-section {
+            margin-bottom: 30px;
+            display: none;
+            
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        
+        .form-group {
+            flex: 1 0 200px;
+            margin: 0 15px 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-group .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            color: #6c757d;
+        }
+        
+        /* Boutons de navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-next {
+            background: #2f8f6f;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: #2980b9;
+        }
+        
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            background: #5a6268;
+        }
+        
+        .btn-submit {
+            background: #28a745;
+            color: white;
+            display: none;
+        }
+        
+        .btn-submit:hover {
+            background: #218838;
+        }
+        
+        /* Messages d'erreur */
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Pied de page */
+        .registration-footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .registration-footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .registration-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <!-- En-tête -->
+        <div class="registration-header">
+            <h1>Création de compte patient</h1>
+            <p>Remplissez le formulaire pour accéder à tous nos services médicaux</p>
+        </div>
+        
+        <!-- Barre de progression (optionnelle) -->
+        <div class="progress-bar">
+            <div class="progress-step active" data-step="1">1</div>
+            <div class="progress-step" data-step="2">2</div>
+            <div class="progress-step" data-step="3">3</div>
+            <div class="progress-step" data-step="4">4</div>
+            <div class="progress-completed" style="width: 0%;"></div>
+        </div>
+        
+        <!-- Formulaire en plusieurs étapes -->
+        <div class="registration-body">
+            <form id="patientRegistrationForm">
+                <!-- Étape 1: Informations de base -->
+                <div class="form-section active" data-step="1">
+                    <h3 class="section-title">Informations personnelles</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Prénom *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="error-message" id="firstName-error">Ce champ est requis</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Nom de famille *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="error-message" id="lastName-error">Ce champ est requis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="birthDate">Date de naissance *</label>
+                            <input type="date" id="birthDate" name="birthDate" required>
+                            <div class="error-message" id="birthDate-error">Veuillez entrer une date valide</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Sexe *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="Homme">Masculin</option>
+                                <option value="Femme">Féminin</option>
+                                <option value="other">Autre</option>
+                            </select>
+                            <div class="error-message" id="gender-error">Veuillez sélectionner une option</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Adresse email *</label>
+                        <input type="email" id="email" name="email" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                        <div class="error-message" id="email-error">Veuillez entrer une adresse email valide</div>
+                    </div>
+                </div>
+                
+                <!-- Étape 2: Coordonnées -->
+                <div class="form-section" data-step="2">
+                    <h3 class="section-title">Coordonnées</h3>
+            
+                    <div class="form-group">
+                        <label for="address">Pays *</label>
+                        <select id="Pays" name="Pays" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="france">France</option>
+                            <option value="belgium">Belgique</option>
+                            <option value="switzerland">Suisse</option>
+                            <option value="canada">Canada</option>
+                            <option value="usa">États-Unis</option>
+                            <option value="morocco">Maroc</option>
+                            <option value="algeria">Algérie</option>
+                            <option value="tunisia">Tunisie</option>
+                            <option value="spain">Espagne</option>
+                            <option value="italy">Italie</option>
+                            <option value="germany">Allemagne</option>
+                            <option value="uk">Royaume-Uni</option>
+                            <option value="Mali">mali</option>
+                            <option value="senegal">Sénégal</option>                            
+                            
+                            <!-- Ajouter d'autres pays si nécessaire -->
+                        </select>
+                        <div class="error-message" id="pays-error">Ce champ est requis</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Adresse *</label>
+                        <input type="text" id="address" name="address" required>
+                        <div class="error-message" id="address-error">Ce champ est requis</div>
+                    </div>
+
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">Ville *</label>
+                            <input type="text" id="city" name="city" required>
+                            <div class="error-message" id="city-error">Ce champ est requis</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="postalCode">Code postal *</label>
+                            <input type="text" id="postalCode" name="postalCode" required>
+                            <div class="error-message" id="postalCode-error">Code postal invalide</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Téléphone *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                            <div class="error-message" id="phone-error">Numéro de téléphone invalide</div>
+                        </div>
+                        
+                         
+                    </div>
+                </div>
+                
+                <!-- Étape 3: Sécurité -->
+                <div class="form-section" data-step="3">
+                    <h3 class="section-title">Sécurité du compte</h3>
+                    
+                    <div class="form-group">
+                        <label for="password">Mot de passe *</label>
+                        <input type="password" id="password" name="password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <div class="error-message" id="password-error">Le mot de passe doit contenir au moins 8 caractères</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmer le mot de passe *</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <div class="error-message" id="confirmPassword-error">Les mots de passe ne correspondent pas</div>
+                    </div>
+                    
+                    
+                </div>
+
+               
+                <!-- Étape 4: Profil médical -->
+                <div class="form-section" data-step="4">
+                    <h3 class="section-title">Profil médical</h3>
+                    <div class="form-group">
+                        <label for="allergies">Allergies</label>
+                        <input type="text" id="allergies" name="allergies" placeholder="Ex: pollen, pénicilline...">
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodGroup">Groupe sanguin *</label>
+                        <select id="bloodGroup" name="bloodGroup" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        <div class="error-message" id="bloodGroup-error">Veuillez sélectionner un groupe sanguin</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="antecedent">Antécedents</label>
+                        <input type="text" id="antecedent" name="antecedent" placeholder="Ex: Paludisme, Fièvre,diabète...">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms" style="display: inline; font-weight: normal; font-size: medium;">
+                            J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a> *
+                        </label>
+                        <div class="error-message" id="terms-error">Vous devez accepter les conditions</div>
+                    </div>
+                </div>
+
+                <!-- Navigation du formulaire -->
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-prev" disabled>Précédent</button>
+                    <button type="button" class="btn btn-next">Suivant</button>
+                    <button type="submit" class="btn btn-submit">S'inscrire</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Pied de page -->
+        <div class="registration-footer">
+            <p>Déjà un compte ? <a href="login.html">Connectez-vous ici</a></p>
+        </div>
+    </div>
+
+    <!-- JavaScript pour la gestion du formulaire multi-étapes -->
+    <script>
+        // Variables globales
+        let currentStep = 1;
+    const totalSteps = 4;
+        
+        // Éléments DOM
+        const formSections = document.querySelectorAll('.form-section');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const prevBtn = document.querySelector('.btn-prev');
+        const nextBtn = document.querySelector('.btn-next');
+        const submitBtn = document.querySelector('.btn-submit');
+        const progressCompleted = document.querySelector('.progress-completed');
+        
+        // Fonction pour passer à l'étape suivante
+        function goToNextStep() {
+            // Validation de l'étape actuelle
+            if (!validateStep(currentStep)) return;
+            
+            // Masquer l'étape actuelle
+            document.querySelector(`.form-section[data-step="${currentStep}"]`).classList.remove('active');
+            document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.remove('active');
+            
+            // Incrémenter l'étape
+            currentStep++;
+            
+            // Afficher la nouvelle étape
+            document.querySelector(`.form-section[data-step="${currentStep}"]`).classList.add('active');
+            document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
+            
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+            
+            // Mettre à jour les boutons de navigation
+            updateNavigationButtons();
+        }
+        
+        // Fonction pour revenir à l'étape précédente
+        function goToPrevStep() {
+            // Masquer l'étape actuelle
+            document.querySelector(`.form-section[data-step="${currentStep}"]`).classList.remove('active');
+            document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.remove('active');
+            
+            // Décrémenter l'étape
+            currentStep--;
+            
+            // Afficher la nouvelle étape
+            document.querySelector(`.form-section[data-step="${currentStep}"]`).classList.add('active');
+            document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
+            
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+            
+            // Mettre à jour les boutons de navigation
+            updateNavigationButtons();
+        }
+        
+        // Fonction pour valider l'étape actuelle
+        function validateStep(step) {
+            let isValid = true;
+            
+            // Valider les champs requis de l'étape
+            const inputs = document.querySelectorAll(`.form-section[data-step="${step}"] input[required], 
+                                                 .form-section[data-step="${step}"] select[required]`);
+            
+            inputs.forEach(input => {
+                const errorId = `${input.id}-error`;
+                const errorElement = document.getElementById(errorId);
+                
+                // Réinitialiser les messages d'erreur
+                if (errorElement) errorElement.style.display = 'none';
+                
+                // Validation basique
+                if (!input.value.trim()) {
+                    if (errorElement) errorElement.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validations spécifiques
+                if (input.id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+                    document.getElementById('email-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (input.id === 'password' && input.value.length < 8) {
+                    document.getElementById('password-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (input.id === 'confirmPassword' && input.value !== document.getElementById('password').value) {
+                    document.getElementById('confirmPassword-error').style.display = 'block';
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+        
+        // Fonction pour mettre à jour la barre de progression
+        function updateProgressBar() {
+            const percentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressCompleted.style.width = `${percentage}%`;
+            
+            // Marquer les étapes précédentes comme complétées
+            progressSteps.forEach((step, index) => {
+                if (index < currentStep - 1) {
+                    step.classList.add('completed');
+                } else {
+                    step.classList.remove('completed');
+                }
+            });
+        }
+        
+        // Fonction pour mettre à jour les boutons de navigation
+        function updateNavigationButtons() {
+            if (currentStep === 1) {
+                prevBtn.disabled = true;
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            } else if (currentStep === totalSteps) {
+                prevBtn.disabled = false;
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                prevBtn.disabled = false;
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+        
+        // Écouteurs d'événements
+        nextBtn.addEventListener('click', goToNextStep);
+        prevBtn.addEventListener('click', goToPrevStep);
+        
+        // Soumission du formulaire
+             document.getElementById('patientRegistrationForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Empêche la soumission par défaut
+            
+          const formData = {
+                nom: document.getElementById('lastName').value,
+                prenom: document.getElementById('firstName').value,
+                adresse:{
+                    rue: document.getElementById('address').value,
+                    ville: document.getElementById('city').value,
+                     codePostal: document.getElementById('postalCode').value,
+                    pays: document.getElementById('Pays').value,   
+                },
+                dateNaissance: document.getElementById('birthDate').value,
+                authentification:{
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    num_telephone: document.getElementById('phone').value,
+                },
+                profilMedical:{
+                    allergies: document.getElementById('allergies').value  ? document.getElementById('allergies').value.split(',').map(item => item.trim()):[],
+    
+                    antecedents: document.getElementById('antecedent').value ? document.getElementById('antecedent').value.split(',').map(item => item.trim()):[],
+                    groupSanguin: document.getElementById('bloodGroup').value,
+                },
+                sexe:document.getElementById('gender').value,
+          }
+            // Afficher les données dans la console (ou envoyer à un serveur)
+            console.log('Données du formulaire:', formData);
+            
+           try{
+            // Envoyer les données au serveur
+            const response = await fetch('http://localhost:5103/api/Patient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.text(); // Récupérez le texte de la réponse d'erreur
+                console.error("Détails de l'erreur :", errorData);
+                throw new Error(`Erreur HTTP! statut: ${response.status}`);
+            }  
+
+            const result = await response.json();
+          console.log("Patient ajouté avec succès:", result);
+            alert("Patient ajouté avec succès!");
+         
+
+               // Rediriger vers le dashboard
+            window.location.href = "login.html";
+
+           }
+              catch (error) {
+                 console.error("Erreur lors de l'ajout du patient:", error);
+                 alert(`Erreur lors de l'ajout du patient: ${error.message}`);
+                }
+            
+            // A 
+             
+            
+         
+        });
+        
+        // Initialisation
+        updateNavigationButtons();
+    </script>
+
+    
+</body>
+</html>

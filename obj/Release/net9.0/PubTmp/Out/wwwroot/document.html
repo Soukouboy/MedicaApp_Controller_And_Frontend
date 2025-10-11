@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documents Médicaux</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="dash-med-style.css"> <!-- tu peux réutiliser ton CSS -->
+</head>
+<body>
+
+  <!-- Section Documents Médicaux seulement -->
+  <section class="documents-section">
+    <h2><i class="fas fa-file-medical"></i> Documents Médicaux</h2>
+    <div class="documents-grid">
+
+      <!-- Exemple 1 : PDF -->
+      <div class="document-card">
+        <i class="fas fa-file-pdf"></i>
+        <span>Compte-rendu 12/10/2023</span>
+        <!-- Le lien "href" doit pointer vers le vrai fichier -->
+        
+          <button type="button" id="ordonnance_pdf_doc">Télécharger</button>
+        
+      </div>
+
+      <!-- Exemple 2 : Radiographie -->
+      <div class="document-card">
+        <i class="fas fa-file-image"></i>
+        <span>Radiographie 05/10/2023</span>
+        <a href="dsk.jpg" download>
+          <button>Télécharger</button>
+        </a>
+      </div>
+
+      <!-- Exemple 3 : Ordonnance -->
+      <div class="document-card">
+        <i class="fas fa-file-prescription"></i>
+        <span>Ordonnance 01/10/2023</span>
+        <a href="documents/ordonnance-01-10-2023.pdf" download>
+          <button>Télécharger</button>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    // Si tu veux dynamiser avec ton API plus tard :
+    // Exemple avec fetch()
+    
+    fetch("http://localhost:5103/api/Documents")
+      .then(res => res.json())
+      .then(docs => {
+        const container = document.querySelector(".documents-grid");
+        container.innerHTML = "";
+        docs.forEach(doc => {
+          container.innerHTML += `
+            <div class="document-card">
+              <i class="fas ${doc.icon}"></i>
+              <span>${doc.nom}</span>
+              <a href="${doc.url}" download>
+                <button>Télécharger</button>
+              </a>
+            </div>
+          `;
+        });
+      });
+    
+  </script>
+
+</body>
+</html>

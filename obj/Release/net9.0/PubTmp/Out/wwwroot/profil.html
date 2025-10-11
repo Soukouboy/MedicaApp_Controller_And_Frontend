@@ -1,0 +1,290 @@
+<style>
+    body {
+        font-family: 'Roboto', Arial, sans-serif;
+        background-color: #c6c7c6;
+        margin: 0;
+        padding: 0;
+    }
+    .profile-container {
+        max-width: 1200px;
+ 
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(31,111,84,0.08);
+        padding: 36px 32px 28px 32px;
+        position: relative;
+    }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+    }
+    .profile-header h1 {
+        color: #1f6f54;
+        font-size: 2em;
+        margin-bottom: 6px;
+    }
+    .profile-header p {
+        color: #07345c;
+        font-size: 1.08em;
+        opacity: 0.8;
+    }
+    .profile-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #e6f7f2;
+        margin: 0 auto 16px auto;
+        display: block;
+        box-shadow: 0 2px 8px rgba(31,111,84,0.10);
+    }
+    .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+    .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .profile-form label {
+        color: #1f6f54;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+    .profile-form input,
+    .profile-form select {
+        padding: 12px 14px;
+        border: 1px solid #2f8f6f;
+        border-radius: 7px;
+        font-size: 1em;
+        background: #f4f9f4;
+        color: #07345c;
+        transition: border 0.2s;
+        width: 100%;
+    }
+    .profile-form input:focus,
+    .profile-form select:focus {
+        border: 2px solid #1f6f54;
+        outline: none;
+    }
+    .profile-form button {
+        background: #1f6f54;
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        padding: 14px 0;
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-top: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(31,111,84,0.08);
+        transition: background 0.2s;
+    }
+    .profile-form button:hover {
+        background: #2f8f6f;
+    }
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .profile-container {
+            padding: 24px 20px;
+            margin: 24px 16px;
+        }
+    }
+    @media (max-width: 480px) {
+        .profile-container {
+            padding: 18px 12px;
+        }
+        .profile-header h1 {
+            font-size: 1.6em;
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Photo de profil" class="profile-avatar">
+        <h1>Mon Profil Médical</h1>
+        <p>Gérez et mettez à jour vos informations personnelles et médicales en toute sécurité.</p>
+    </div>
+    <form class="profile-form" method="post" id="profileForm">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="nom">Nom*</label>
+                <input type="text" id="nom" name="nom" required>
+            </div>
+            <div class="form-group">
+                <label for="prenom">Prénom*</label>
+                <input type="text" id="prenom" name="prenom" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="dateNaissance">Date de Naissance*</label>
+                <input type="date" id="dateNaissance" name="dateNaissance" required>
+            </div>
+            <div class="form-group">
+                <label for="sexe">Sexe*</label>
+                <select id="sexe" name="sexe" required>
+                    <option value="">Sélectionner...</option>
+                    <option value="Homme">Homme</option>
+                    <option value="Femme">Femme</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                 <label for="pays">Pays*</label>
+                 <input type="text" id="pays" name="pays" required>
+            </div>
+
+            <div class="form-group">
+                <label for="adresse">Adresse*</label>
+                <input type="text" id="adresse" name="adresse" placeholder="Rue" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="codePostal">Code Postal*</label>
+                <input type="text" id="codePostal" name="codePostal" required>
+            </div>
+            <div class="form-group">
+                <label for="ville">Ville*</label>
+                <input type="text" id="ville" name="ville" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="groupSanguin">Groupe Sanguin*</label>
+                <select id="groupSanguin" name="groupSanguin" required>
+                    <option value="">Sélectionner...</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email*</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="allergies">Allergies</label>
+                <input type="text" id="allergies" name="allergies" placeholder="Liste des allergies (séparées par des virgules)">
+            </div>
+        </div>
+        <div class="form-row">
+        <div class="form-group">
+            <label for="antecedents">Antécédents Médicaux</label>
+            <input type="text" id="antecedents" name="antecedents" placeholder="Liste des antécédents médicaux (séparés par des virgules)">
+        </div>;
+        <div class="form-group">
+            <label for="phone">Numéro de Téléphone</label>
+            <input type="tel" id="phone" name="phone" placeholder="Numéro de téléphone">    
+     </div>
+     </div>
+
+        <button type="submit">Enregistrer</button>
+    </form>
+ 
+
+    <script>
+    
+    /*
+    
+        
+document.getElementById("profileForm").addEventListener('submit', async function(event) {
+         event.preventDefault(); // Empêche la soumission par défaut  
+            // Récupérer l'ID du patient depuis localStorage
+            // Assurez-vous que l'ID du patient est stocké dans localStorage
+            console.log("ID du patient récupéré depuis localStorage:", localStorage.getItem('patientId'));
+         // Afficher le mot de passe global pour débogage
+         const patientId = localStorage.getItem('patientId'); // Assurez-vous que l'ID du patient est stocké dans localStorage
+         const password_global = localStorage.getItem('password'); // Récupérer le mot de passe depuis localStorage
+         console.log("Mot de passe récupéré depuis localStorage:", password_global);     
+         const formData = {
+                patientID: patientId, // Assurez-vous que l'ID du patient est stocké dans localStorage
+            nom: document.getElementById('nom').value,
+            prenom: document.getElementById('prenom').value,
+                adresse:{
+                    rue: document.getElementById('adresse').value,
+                    ville: document.getElementById('ville').value,
+                     codePostal: document.getElementById('codePostal').value,
+                    pays: document.getElementById('pays').value,   
+                },
+                dateNaissance: document.getElementById('dateNaissance').value,
+                authentification:{
+                    email: document.getElementById('email').value,
+                    password:password_global, // Assurez-vous que le mot de passe est géré correctement
+                    num_telephone: document.getElementById('phone').value,
+                },
+                profilMedical:{
+                    allergies: document.getElementById('allergies').value  ? document.getElementById('allergies').value.split(',').map(item => item.trim()):[],
+    
+                    antecedents: document.getElementById('antecedents').value ? document.getElementById('antecedent').value.split(',').map(item => item.trim()):[],
+                    groupSanguin: document.getElementById('groupSanguin').value,
+                },
+                sexe:document.getElementById('sexe').value,
+
+          };
+            // Afficher les données dans la console (ou envoyer à un serveur)
+            console.log('Données du formulaire:', formData);
+            
+           try{
+            // Envoyer les données au serveur
+            const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`, {
+                method: 'PUT', // Utilisez PUT pour mettre à jour les données
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.text(); // Récupérez le texte de la réponse d'erreur
+                console.error("Détails de l'erreur :", errorData);
+                throw new Error(`Erreur HTTP! statut: ${response.status}`);
+            }  
+
+            const result = await response.json();
+          console.log("Patient ajouté avec succès:", result);
+            alert("Vos données sont modifier avec succès!");
+         
+ 
+
+           }
+              catch (error) {
+                 console.error("Erreur lors de l'ajout du patient:", error);
+                 alert(`Erreur lors de l'ajout du patient: ${error.message}`);
+                }
+            
+            // A 
+             
+            
+         
+    });
+    */
+
+    
+    </script>
+
+</div>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Médical Intelligent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dash-med-style.css">
+        <link rel="icon" href="logo.png" type="image/x-icon">
+   
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-hospital-alt"></i>
+                <span>SmartHealth</span>
+            </div>
+           <nav>
+                <ul>
+                    <li class="active"> <i class="fas fa-tachometer-alt"></i><button type="button" id="Dashboard">Tableau de bord</button> </li>
+                    <li><i class="fas fa-user-injured"></i> <button type="button" id="btnProfil">Profil Medical</button> </li>
+                    <li> <i class="fas fa-file-medical" ></i> <button type="button" id="document">Documents</button> </li>
+                    <li> <i class="fas fa-search"></i> <button type="button" id="rdv">Rendez Vous</button> </li>
+                    <li> <i class="fas fa-robot" ></i> <button type="button"  ><a href="#ai-chat" style="color: antiquewhite;">Assistant IA</a> </button> </li>
+                    <li> <i class="fas fa-cog"></i> <button type="button" id="Parametres"> Paramètres </button> </li>
+                </ul>
+                <ul class="logout">
+                    <li style="margin-bottom: 650px;"> <i class="fas fa-sign-out-alt" id="deconnexion"></i> <button id="btnDeconnexion" > Déconnexion</button></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-box">
+                    <input type="text" placeholder="Rechercher un Medecin...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-profile">
+                    <span>Bienvenue --</span>
+                    <h3 id="Sexe-patient">Mr/Mme Patient</h3>
+                </div>
+            </header>
+
+           <div class="content">
+                <!-- Patient Overview Section -->
+                <section class="patient-overview">
+                    <h2><i class="fas fa-user-injured"></i> Dossier Patient</h2>
+                    <div class="patient-info">
+                        <div class="patient-card">
+                            <div class="patient-header">
+                                <div>
+                                    <h3 id="patient_nom"></h3>
+                                   <strong>Groupe Sanguin: <p id="Groupsanguin"> </p></strong>
+                                     
+                                </div>
+                            </div>
+                            <div class="patient-stats">
+                                <div>
+                                    <span>Date</span>
+                                    <strong id="dateNaissance">120/80</strong>
+                                </div>
+                                <div>
+                                    <span>Sexe</span>
+                                    <strong id="sexe">XY</strong>
+                                </div>
+                                <div>
+                                    <span>Pays</span>
+                                    <strong id="pays">Pays</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="patient-details">
+                            <h4 style="color: darkgreen;">Informations médicales</h4>
+                            <ul>
+                                <li><strong id="Allergies">Allergies:</strong>  </li>
+                                <li><strong id="Traitements">Traitements:</strong>  </li>
+                                <li><strong id="antecedants">Antécédents:</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                </section>
+                 <!-- Prise et Gestion de Rendez-vous Section -->
+                 <section class="rendez-vous-section">
+                    <h2> <i class="fas fa-calendar-plus"></i>Rendez-vous</h2>
+                    <div class="rdv-grid">
+                            <div class="rdv-card">
+                                <i class="fas fa-calendar-check"></i>
+                                <button type="button" id="btn-prendre-rdv"> Prendre un Rendez-Vous</button>
+                            </div>
+
+                            <div class="rdv-card">
+                                <i class="fas fa-headset"></i>
+                                <button type="button" id="btn-gerer-rdv"> Gérer mes Rendez-Vous</button>
+                            </div>
+                </div>
+                </section>
+                <!-- Medical Documents Section -->
+                <section class="documents-section">
+                    <h2><i class="fas fa-file-medical"></i> Documents Médicaux</h2>
+                    <div class="documents-grid">
+                        <div class="document-card">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>Compte-rendu 12/10/2023</span>
+                            <button id="ordonnance_pdf">Télécharger</button>
+                        </div>
+                        <div class="document-card">
+                            <i class="fas fa-file-image"></i>
+                            <span>Radiographie 05/10/2023</span>
+                            <button>Télécharger</button>
+                        </div>
+                        <div class="document-card">
+                            <i class="fas fa-file-prescription"></i>
+                            <span>Ordonnance 01/10/2023</span>
+                            <button>Télécharger</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Chat Interface -->
+                <section class="ai-chat" id="ai-chat">
+                    <h2><i class="fas fa-robot"></i> Assistant Médical IA</h2>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message ai-message">
+                                <div class="message-header">
+                                    <i class="fas fa-robot"></i>
+                                    <span>Assistant IA</span>
+                                </div>
+                                <p>Bonjour  <span id="nom-chat">Patient</span> , comment puis-je vous aider aujourd'hui ? Je peux vous aider à analyser vos symptomes </p>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="user-input" placeholder="Posez votre question...">
+                            <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+ <script src="patient-dashboard.js" ></script>    
+</body>
+</html>

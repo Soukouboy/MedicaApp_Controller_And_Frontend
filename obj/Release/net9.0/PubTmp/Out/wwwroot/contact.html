@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - SmartHealth</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    
+    <!-- CSS interne pour la page Contact -->
+    <style>
+    /* Section de présentation */
+    .contact-hero {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    .contact-hero h1 {
+        color: #1f6f54;
+        font-size: 2.3em;
+        margin-bottom: 10px;
+    }
+    .contact-lead {
+        color: #07345c;
+        font-size: 1.15em;
+    }
+    /* Bloc principal */
+    .contact-main {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .contact-form-block, .contact-infos-block {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.06);
+        padding: 28px 22px;
+        min-width: 320px;
+        max-width: 400px;
+        flex: 1 1 340px;
+    }
+    .contact-form-block h2, .contact-infos-block h2 {
+        color: #1f6f54;
+        margin-bottom: 16px;
+        font-size: 1.25em;
+    }
+    /* Formulaire */
+    .contact-form .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .contact-form label {
+        color: #07345c;
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+    .contact-form input, .contact-form textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #2f8f6f;
+        border-radius: 6px;
+        font-size: 1em;
+        outline: none;
+        background: #f4f9f4;
+        color: #07345c;
+        margin-bottom: 2px;
+    }
+    .contact-form textarea {
+        resize: vertical;
+    }
+    .contact-btn {
+        background: #1f6f54;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 28px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 8px;
+    }
+    .contact-btn:hover {
+        background: #2f8f6f;
+    }
+    /* Infos de contact */
+    .contact-infos {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 16px;
+    }
+    .contact-infos li {
+        color: #07345c;
+        font-size: 1.05em;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .contact-infos a {
+        color: #1f6f54;
+        text-decoration: underline;
+    }
+    .contact-socials {
+        margin-bottom: 14px;
+    }
+    .contact-socials a {
+        color: #1f6f54;
+        font-size: 1.4em;
+        margin: 0 8px;
+        transition: color 0.2s;
+    }
+    .contact-socials a:hover {
+        color: #f7b500;
+    }
+    .contact-map {
+        margin-top: 10px;
+    }
+    @media (max-width: 900px) {
+        .contact-main {
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+        }
+        .contact-form-block, .contact-infos-block {
+            max-width: 100%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+      
+      
+          <i class=" fas fa-hospital-alt"></i>
+        <div class="logo">SmartHealth</div>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="about.html"> About Us</a>
+            <a href="contact.html" class="active"> Contact</a>
+            <a href="help.html"> Aide</a>
+            <span class="spacer"></span>
+            <a href="login.html" class="Login"> Login</a>
+        </nav>
+    </aside>
+    <main class="content">
+        <section class="contact-hero">
+            <h1>Contactez SmartHealth</h1>
+            <p class="contact-lead">Une question, un besoin d’assistance ou une suggestion ? Notre équipe est à votre écoute !</p>
+        </section>
+
+        <section class="contact-main">
+            <div class="contact-form-block">
+                <h2>Formulaire de contact</h2>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name" >Nom</label>
+                        <input type="text" id="name" name="name" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Votre email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Votre message..." required></textarea>
+                    </div>
+                    <button type="submit" class="contact-btn">Envoyer</button>
+                </form>
+            </div>
+            <div class="contact-infos-block">
+                <h2>Nos coordonnées</h2>
+                <ul class="contact-infos">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de la Santé, Rabat, Maroc</li>
+                    <li><i class="fas fa-envelope"></i> <a href="mailto:soukounadiadie6@gmail.com">contact@smarthealth.com</a></li>
+                    <li><i class="fas fa-phone"></i> <a href="tel:+212649947330">+212 6 49 947330</a></li>
+                </ul>
+                <div class="contact-socials">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+
+                </div>
+                <div class="contact-map">
+                    <!-- Carte Google Maps intégrée (exemple) -->
+                    <iframe src="https://www.google.com/maps?q=Rabat,+Maroc&output=embed" width="100%" height="180" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

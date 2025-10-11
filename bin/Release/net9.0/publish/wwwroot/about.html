@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - SmartHealth</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    
+    <!-- CSS interne pour la page About Us -->
+    <style>
+    /* Section de présentation */
+    .about-hero {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    .about-hero h1 {
+        color: #1f6f54;
+        font-size: 2.3em;
+        margin-bottom: 10px;
+    }
+    .about-lead {
+        color: #07345c;
+        font-size: 1.15em;
+    }
+    /* Mission et valeurs */
+    .about-mission {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.06);
+        padding: 24px 18px;
+        margin-bottom: 32px;
+    }
+    .about-mission h2 {
+        color: #1f6f54;
+        margin-bottom: 8px;
+    }
+    .about-values {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        list-style: none;
+        margin: 12px 0 0 0;
+        padding: 0;
+    }
+    .about-values li {
+        background: #f4f9f4;
+        border-radius: 8px;
+        padding: 10px 18px;
+        color: #1f6f54;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.05em;
+    }
+    /* Équipe */
+    .about-team {
+        margin-bottom: 32px;
+    }
+    .about-team h2 {
+        color: #1f6f54;
+        margin-bottom: 16px;
+    }
+    .team-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .team-member {
+        background: #fafbfc;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.04);
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 180px;
+        text-align: center;
+    }
+    .team-member img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+    /* Services phares */
+    .about-services {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.06);
+        padding: 24px 18px;
+        margin-bottom: 32px;
+    }
+    .about-services h2 {
+        color: #1f6f54;
+        margin-bottom: 12px;
+    }
+    .about-services-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+    .about-services-list li {
+        background: #f4f9f4;
+        border-radius: 8px;
+        padding: 10px 18px;
+        color: #07345c;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.05em;
+    }
+    /* Engagements */
+    .about-engagements {
+        margin-bottom: 32px;
+    }
+    .about-engagements h2 {
+        color: #1f6f54;
+        margin-bottom: 12px;
+    }
+    .about-engagements-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+    .about-engagements-list li {
+        background: #f4f9f4;
+        border-radius: 8px;
+        padding: 10px 18px;
+        color: #1f6f54;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1.05em;
+    }
+    /* Chiffres clés */
+    .about-stats {
+        display: flex;
+        gap: 32px;
+        justify-content: center;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+    }
+    .about-stats .stat {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(7,52,92,0.04);
+        padding: 18px 24px;
+        text-align: center;
+    }
+    .about-stats .stat-value {
+        color: #1f6f54;
+        font-size: 1.5em;
+        font-weight: bold;
+        display: block;
+    }
+    .about-stats .stat-label {
+        color: #07345c;
+        font-size: 1em;
+    }
+    /* Contact et réseaux sociaux */
+    .about-contact {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    .about-contact h2 {
+        color: #1f6f54;
+        margin-bottom: 10px;
+    }
+    .about-contact a {
+        color: #1f6f54;
+        text-decoration: underline;
+    }
+    .about-socials {
+        margin-top: 10px;
+    }
+    .about-socials a {
+        color: #1f6f54;
+        font-size: 1.5em;
+        margin: 0 8px;
+        transition: color 0.2s;
+    }
+    .about-socials a:hover {
+        color: #f7b500;
+    }
+    </style>
+
+</head>
+<body>
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+        <div class="logo">SmartHealth</div>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="about.html" class="active"> About Us</a>
+            <a href="contact.html"> Contact</a>
+            <a href="help.html"> Aide</a>
+            <span class="spacer"></span>
+            <a href="login.html" class="Login"> Login</a>
+            <a href="inscription.html" class="inscription">Sign in</a>
+        </nav>
+    </aside>
+    <main class="content">
+        <!-- Présentation -->
+        <section class="about-hero">
+            <h1>À propos de SmartHealth</h1>
+            <p class="about-lead">SmartHealth est une plateforme innovante dédiée à la santé connectée, permettant à chacun d’accéder facilement à des soins de qualité, où qu’il soit.</p>
+        </section>
+
+        <!-- Mission et valeurs -->
+        <section class="about-mission">
+            <h2>Notre mission</h2>
+            <p>Faciliter l’accès aux soins médicaux pour tous, grâce à la technologie et à l’expertise humaine. Nous croyons en une santé plus accessible, plus rapide et plus sûre.</p>
+            <h2>Nos valeurs</h2>
+            <ul class="about-values">
+                <li><i class="fas fa-user-shield"></i> Confidentialité</li>
+                <li><i class="fas fa-lightbulb"></i> Innovation</li>
+                <li><i class="fas fa-hand-holding-heart"></i> Empathie</li>
+                <li><i class="fas fa-users"></i> Accessibilité</li>
+                <li><i class="fas fa-star"></i> Qualité</li>
+            </ul>
+        </section>
+
+        <!-- Notre équipe -->
+        <section class="about-team">
+            <h2>Notre équipe</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Karim Benali">
+                    <div>
+                        <strong>Dr. Karim Benali</strong><br>
+                        Médecin généraliste
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Sarah El Amrani">
+                    <div>
+                        <strong>Dr. Sarah El Amrani</strong><br>
+                        Pédiatre
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="dsk.jpg" alt="Soukouna Diadie">
+                    <div>
+                        <strong>Soukouna Diadie</strong><br>
+                        Ingénieur Data Science & Développeur Full Stack
+                    </div>
+                </div>
+                <div class="team-member">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Nadia Bennis">
+                    <div>
+                        <strong>Nadia Bennis</strong><br>
+                        Support & Assistance
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nos services phares -->
+        <section class="about-services">
+            <h2>Nos services phares</h2>
+            <ul class="about-services-list">
+                <li><i class="fas fa-stethoscope"></i> Consultation médicale en ligne</li>
+                <li><i class="fas fa-calendar-check"></i> Prise de rendez-vous rapide</li>
+                <li><i class="fas fa-file-medical"></i> Ordonnances et résultats en ligne</li>
+                <li><i class="fas fa-ambulance"></i> Hub d’urgence médicale</li>
+                <li><i class="fas fa-user-md"></i> Suivi personnalisé</li>
+            </ul>
+        </section>
+
+        <!-- Engagements et sécurité -->
+        <section class="about-engagements">
+            <h2>Nos engagements</h2>
+            <ul class="about-engagements-list">
+                <li><i class="fas fa-lock"></i> Sécurité et confidentialité de vos données</li>
+                <li><i class="fas fa-check-circle"></i> Respect des normes médicales et éthiques</li>
+                <li><i class="fas fa-headset"></i> Support disponible 7j/7</li>
+            </ul>
+        </section>
+
+        <!-- Chiffres clés -->
+        <section class="about-stats">
+            <div class="stat">
+                <span class="stat-value">+50 000</span>
+                <span class="stat-label">patients accompagnés</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">4,9/5</span>
+                <span class="stat-label">note de satisfaction</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">24h/24</span>
+                <span class="stat-label">accès à la plateforme</span>
+            </div>
+        </section>
+
+        <!-- Contact et réseaux sociaux -->
+        <section class="about-contact">
+            <h2>Contactez-nous</h2>
+            <p>Pour toute question ou suggestion, contactez-nous à <a href="mailto:soukounadiadie6@gmail.com">contact@smarthealth.com</a></p>
+            <div class="about-socials">
+                <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

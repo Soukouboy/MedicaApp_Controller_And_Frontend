@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Patient / Praticien</title>
+        <link rel="icon" href="logo.png" type="image/x-icon">
+
+    <style>
+        /* --------- Réinitialisation --------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .title-login {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2f8f6f;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* --------- Conteneur du formulaire --------- */
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* --------- Champs --------- */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* --------- Messages d'erreur --------- */
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none; /* Caché par défaut */
+        }
+
+        /* --------- Bouton --------- */
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #2f8f6f;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #00c6fb;
+        }
+
+        /* --------- Lien --------- */
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .forgot-password a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --------- Formulaire --------- -->
+    <div class="login-container">
+        <h2 class="title-login">Connexion</h2>
+
+        <form id="loginForm" novalidate> <!-- novalidate désactive la validation HTML par défaut -->
+
+            <!-- Sélection du rôle -->
+            <div class="form-group">
+                <label for="role">Rôle</label>
+                <select id="role" name="role">
+                    <option value="">-- Sélectionnez votre rôle --</option>
+                    <option value="patient">Patient</option>
+                    <option value="praticien">Praticien</option>
+                </select>
+                <div class="error" id="roleError">Veuillez sélectionner un rôle.</div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" id="email" name="email" placeholder="exemple@mail.com">
+                <div class="error" id="emailError">Veuillez entrer un email valide.</div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="Votre mot de passe">
+                <div class="error" id="passwordError">Veuillez entrer un mot de passe (min. 6 caractères).</div>
+            </div>
+
+            <!-- Bouton -->
+            <button type="submit">Se connecter</button>
+
+            <!-- Mot de passe oublié -->
+            <div class="forgot-password">
+                <a href="#">Mot de passe oublié ?</a>
+            </div>
+        </form>
+    </div>
+
+ <script src="login.js" defer></script>
+
+</body>
+</html>

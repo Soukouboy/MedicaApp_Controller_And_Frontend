@@ -1,0 +1,46 @@
+@MedicalApp.API1_HostAddress = http://localhost:5103
+
+GET {{MedicalApp.API1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{MedicalApp.API1_HostAddress}}/api/patient
+
+###
+
+POST {{MedicalApp.API1_HostAddress}}/api/patient
+Content-Type: application/json
+
+{
+  //Patient
+}
+
+###
+
+POST {{MedicalApp.API1_HostAddress}}/api/patient/login
+Content-Type: application/json
+
+{
+  //LoginModel
+}
+
+###
+
+@id=0
+DELETE {{MedicalApp.API1_HostAddress}}/api/patient/{{id}}
+
+###
+
+GET {{MedicalApp.API1_HostAddress}}/api/patient/{{id}}
+
+###
+
+PUT {{MedicalApp.API1_HostAddress}}/api/patient/{{id}}
+Content-Type: application/json
+
+{
+  //Patient
+}
+
+###

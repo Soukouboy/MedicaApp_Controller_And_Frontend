@@ -1,0 +1,349 @@
+/* ===== Footer moderne et harmonisé ===== */
+.main-footer {
+    background: #1f6f54; /* Fond vert foncé comme le menu */
+    color: #fff; /* Texte blanc */
+    padding: 32px 0 18px 0; /* Espace intérieur haut/bas */
+    margin-top: 48px;
+}
+.footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+/* Logo SmartHealth dans le footer */
+.footer-logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+/* Liens du footer */
+.footer-links {
+    font-size: 1em;
+    margin-bottom: 6px;
+}
+.footer-links a {
+    color: #fff;
+    text-decoration: underline dotted;
+    margin: 0 4px;
+    transition: color 0.2s;
+}
+.footer-links a:hover {
+    color: #f7b500;
+}
+/* Icônes réseaux sociaux */
+.footer-socials {
+    margin-bottom: 6px;
+}
+.footer-socials a {
+    color: #fff;
+    font-size: 1.3em;
+    margin: 0 6px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.footer-socials a:hover {
+    color: #f7b500;
+}
+/* Copyright */
+.footer-copy {
+    font-size: 0.95em;
+    opacity: 0.8;
+}
+/* ===== Section Nos services ===== */
+/* Conteneur principal de la section */
+.services-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f9f4;
+    border-radius: 24px;
+    margin: 40px 0 32px 0;
+    padding: 40px 32px 40px 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    gap: 32px;
+    flex-wrap: wrap;
+}
+/* Titre centré et stylisé */
+.services-title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #fdfdfd;
+    border-radius: 10px;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+    background: #07345c;
+    cursor: pointer;
+}
+/* Grille responsive pour les cartes de service */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); /* 2 colonnes sur desktop, 1 sur mobile */
+    gap: 32px;
+    max-width: 1200px;
+    
+    margin: 0 auto;
+}
+/* Carte de service avec ombre et coins arrondis */
+.service-card {
+    display: flex;
+    align-items: flex-start;
+    background:#07345c;
+  
+    border-radius: 22px;
+    box-shadow: 0 4px 18px rgba(7,52,92,0.08);
+    padding: 28px 32px;
+   
+}
+/* Effet au survol de la carte */
+ 
+/* Icône à gauche de chaque carte */
+ 
+/* Titre du service */
+.service-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.25em;
+    color: #fff;
+    font-weight: bold;
+}
+/* Description du service */
+ 
+/* Aligner le h1 et la barre de recherche sur la même ligne dans la section welcome */
+.welcome-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centre horizontalement */
+    gap: 32px;
+    flex-wrap: wrap;
+}
+.welcome-header-flex h1 {
+    margin: 0;
+    font-size: 2.2em;
+    color: #1f6f54;
+}
+.search-bar-inline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+ 
+    .search-bar-inline input[type="text"] {
+        padding: 14px 28px; /* Taille augmentée */
+        border: 1px solid #2f8f6f;
+        border-radius: 6px 0 0 6px;
+        font-size: 1.15em; /* Texte plus grand */
+        min-width: 320px; /* Largeur minimale plus grande */
+        outline: none;
+    }
+.search-bar-inline button {
+    padding: 10px 20px;
+    border: none;
+    background: #1f6f54;
+    color: #fff;
+    border-radius: 0px 6px 6px 0;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.search-bar-inline button:hover {
+    background: #2f8f6f;
+}
+/* ===== Hero Section (Accueil Moderne) ===== */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f9f4;
+    border-radius: 24px;
+    margin: 40px 0 32px 0;
+    padding: 40px 32px 40px 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    gap: 32px;
+    flex-wrap: wrap;
+}
+.hero-left {
+    flex: 1 1 350px;
+    min-width: 320px;
+}
+.hero-section h1 {
+    font-size: 2.6em;
+    font-weight: bold;
+    color: #1f6f54;
+    margin-bottom: 24px;
+    line-height: 1.1;
+}
+.hero-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px 0;
+}
+.hero-benefits li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #1f6f54;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.hero-img {
+    width: 1000px;
+    height: 2000px;
+    object-fit: none;
+    border-radius: 32px;
+    background: #e6f7f2;
+    box-shadow: 0 2px 16px rgba(31,111,84,0.08);
+    /* border: 8px solid #e6f7f2;  Bordure supprimée pour agrandir l'image */
+}
+ 
+.hero-btn:hover {
+    background: #1f6f54;
+}
+.hero-stats {
+    display: flex;
+    gap: 32px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(7,52,92,0.07);
+    padding: 18px 32px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+.stat-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: #07345c;
+}
+.stat-label {
+    font-size: 1em;
+    color: #07345c;
+}
+.stars {
+    color: #f7b500;
+    font-size: 1.1em;
+}
+.hero-right {
+    flex: 1 1 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-btn {
+    background: #07345c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 18px 0 32px 0;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(7,52,92,0.08);
+    transition: background 0.2s;
+}
+
+.hero-img {
+    width: 420px;
+    height: 340px;
+    object-fit: cover;
+    border-radius: 24px;
+    background: #e6f7f2;
+    box-shadow: 0 2px 16px rgba(31,111,84,0.08);
+    border: 20px solid #e6f7f2;
+}
+/* Styles généraux du body : suppression des marges, police globale, couleur de fond */
+body {
+    margin: 0; /* Enlève la marge par défaut du navigateur */
+    font-family: Arial, sans-serif; /* Définit la police principale */
+    background-color: #f4f9f4; /* Couleur de fond douce */
+}
+
+/* Menu horizontal en haut de la page (anciennement barre latérale) */
+.sidebar {
+    width: 100%; /* Prend toute la largeur */
+    background-color: #1f6f54; /* Couleur de fond du menu */
+    color: white; /* Couleur du texte */
+    display: flex; /* Affichage en flexbox */
+    flex-direction: row; /* Les éléments sont alignés horizontalement */
+    align-items: center; /* Centrage vertical des éléments */
+    padding: 0 20px; /* Espace à gauche et à droite */
+    height: 60px; /* Hauteur du menu */
+    position: fixed; /* Fixe le menu en haut */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Passe au-dessus du contenu */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Légère ombre sous le menu */
+}
+
+/* Logo SmartHealth dans le menu */
+.sidebar .logo {
+    font-size: 1.5em; /* Taille du texte du logo */
+    font-weight: bold; /* Texte en gras */
+    margin-right: 40px; /* Espace à droite du logo */
+    margin-bottom: 0; /* Pas d'espace en bas */
+}
+
+/* Conteneur des liens de navigation */
+.sidebar nav {
+    display: flex; /* Affichage horizontal des liens */
+    flex-direction: row;
+    gap: 10px; /* Espace entre chaque lien */
+}
+
+/* Style des liens du menu */
+.sidebar nav a {
+    text-decoration: none; /* Pas de soulignement */
+    color: white; /* Couleur du texte */
+    padding: 10px 18px; /* Espace autour du texte */
+    margin: 0;
+    display: block;
+    border-radius: 5px; /* Coins arrondis */
+    transition: background 0.2s; /* Animation douce au survol */
+}
+
+/* Couleur de fond au survol ou si actif */
+.sidebar nav a:hover, .sidebar nav a.active {
+    background-color: #2f8f6f;
+}
+
+/* Contenu principal */
+/* Contenu principal : espace pour ne pas passer sous le menu */
+.content {
+    padding: 80px 20px 20px 20px; /* padding-top = hauteur du menu + marge */
+}
+
+/* En-tête de la page (barre de recherche) */
+ 
+
+/* Section de bienvenue (texte d'accueil) */
+.welcome {
+    background-color: white; /* Fond blanc */
+    padding: 20px; /* Espace intérieur */
+    border-radius: 10px; /* Coins arrondis */
+    margin-bottom: 20px; /* Espace sous la section */
+}
+
+ 
+ 
+/* Espaceur flexible pour pousser le bouton Login à droite */
+.sidebar nav .spacer {
+    flex-grow: 1 !important;
+    min-width: 620px;
+}
+
+/* S'assurer qu'aucun margin-left ne gêne le bouton Login */
+.sidebar nav .Login {
+    margin-left: 0 !important;
+}
+
+ /* Bouton Login dans le menu */
+ 

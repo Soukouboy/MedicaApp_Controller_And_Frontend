@@ -1,0 +1,116 @@
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Spécifique à la prise de RDV */
+        .rdv-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(31, 111, 84, 0.10);
+            padding: 36px 32px 32px 32px;
+            max-width: 520px;
+            margin: 40px auto 0 auto;
+            text-align: center;
+        }
+        .rdv-card h2 {
+            color: #1f6f54;
+            font-size: 2em;
+            margin-bottom: 18px;
+        }
+        .rdv-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #07345c;
+            font-weight: 600;
+            text-align: left;
+        }
+        .rdv-form select, .rdv-form input[type="datetime-local"] {
+            width: 100%;
+            padding: 12px 10px;
+            border-radius: 8px;
+            border: 1.5px solid #2f8f6f;
+            font-size: 1.08rem;
+            background: #f4f9f4;
+            color: #1f6f54;
+            margin-bottom: 18px;
+            outline: none;
+            transition: border 0.2s;
+            margin-right: 20px;
+        }
+        .rdv-form select:focus, .rdv-form input[type="datetime-local"]:focus {
+            border: 2px solid #1f6f54;
+        }
+        .rdv-form button {
+            background: linear-gradient(90deg, #1f6f54 60%, #2f8f6f 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #1f6f5422;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .rdv-form button:hover {
+            background: linear-gradient(90deg, #2f8f6f 60%, #1f6f54 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .rdv-success {
+            color: #1f6f54;
+            background: #e6f7f2;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 18px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .medecin-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .medecin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2f8f6f;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="rdv-card">
+            <h2><i class="fa-solid fa-calendar-plus"></i> Prendre un rendez-vous</h2>
+            <form class="rdv-form" id="rdvForm">
+                <label for="medecin">Choisissez un médecin :</label>
+                <select id="medecin" name="medecin" required>
+                    <option value="">Sélectionner...</option>
+                    <!-- Options médecins générées dynamiquement -->
+                </select>
+                <label for="date">Date et heure :</label>
+                <input type="datetime-local" id="date" name="date" required min="{{minDate}}" >
+                <button type="submit" id="submit"><i class="fa-solid fa-check"></i> Confirmer le rendez-vous</button>
+            </form>
+            <div id="rdvSuccess" class="rdv-success" style="display:block;"></div>
+        </div>
+    </div>
+    <script>
+       
+      
+
+        const btnSubmit=document.getElementById("submit");
+
+        if(btnSubmit){
+            btnSubmit.addEventListener("submit",async ()=>{
+
+                 
+
+            });
+        }
+
+    </script>
+</body>
+
