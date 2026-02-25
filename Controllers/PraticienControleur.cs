@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using MedicalApp;
 using Microsoft.AspNetCore.Mvc;
 using MedicalApp.API1.DTO;
+using MedicalApp.Services;
+using MedicalApp.Metier;
 
 namespace MedicalApp.Controllers
 {
@@ -115,6 +116,15 @@ namespace MedicalApp.Controllers
         {
             var rdvs = await _praticienService.GetRendezVousByPraticienAsync(id);
             return Ok(rdvs);
+        }
+
+        // Récupérer la liste des patients d'un praticien
+
+        [HttpGet("{id}/patients")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetPatientsByPraticien(int id)
+        {
+            var patients = await _praticienService.GetPatientsByPraticienAsync(id);
+            return Ok(patients);
         }
     }
 

@@ -1,5 +1,99 @@
 [
   {
+    "ContainingType": "MedicalApp.API1.Controllers.AdminController",
+    "Method": "CreateAdmin",
+    "RelativePath": "api/Admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "adminDto",
+        "Type": "MedicalApp.API1.DTO.AdminDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "MedicalApp.Metier.Administrateur",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MedicalApp.API1.Controllers.AdminController",
+    "Method": "GetAdminById",
+    "RelativePath": "api/Admin/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "MedicalApp.Metier.Administrateur",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MedicalApp.API1.Controllers.AdminController",
+    "Method": "Authenticate",
+    "RelativePath": "api/Admin/authenticate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "authDto",
+        "Type": "MedicalApp.API1.Controllers.AuthDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "MedicalApp.Metier.Administrateur",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DiagnoseController",
+    "Method": "Diagnose",
+    "RelativePath": "api/Diagnose",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MedicalApp.API1.DTO.DiagnostiqueRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MedicalApp.API1.Controllers.DocumentMedicalControleur",
     "Method": "CreateDocument",
     "RelativePath": "api/DocumentMedicalControleur",
@@ -15,7 +109,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.DocumentMedical",
+        "Type": "MedicalApp.Metier.DocumentMedical",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -35,7 +129,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.DocumentMedical, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.DocumentMedical, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -61,7 +155,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.DocumentMedical",
+        "Type": "MedicalApp.Metier.DocumentMedical",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -134,7 +228,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Medicaments, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.Medicaments, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -176,7 +270,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Medicaments",
+        "Type": "MedicalApp.Metier.Medicaments",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -201,7 +295,7 @@
       },
       {
         "Name": "medicament",
-        "Type": "MedicalApp.Medicaments",
+        "Type": "MedicalApp.Metier.Medicaments",
         "IsRequired": true
       }
     ],
@@ -225,26 +319,6 @@
   },
   {
     "ContainingType": "MedicalApp.API1.Controllers.OrdonnanceController",
-    "Method": "GetAllOrdonnances",
-    "RelativePath": "api/Ordonnance",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Ordonnance, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "MedicalApp.API1.Controllers.OrdonnanceController",
     "Method": "GetOrdonnanceById",
     "RelativePath": "api/Ordonnance/{id}",
     "HttpMethod": "GET",
@@ -259,7 +333,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Ordonnance",
+        "Type": "MedicalApp.Metier.Ordonnance",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -284,7 +358,7 @@
       },
       {
         "Name": "ordonnance",
-        "Type": "MedicalApp.Ordonnance",
+        "Type": "MedicalApp.Metier.Ordonnance",
         "IsRequired": true
       }
     ],
@@ -323,6 +397,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MedicalApp.API1.Controllers.OrdonnanceController",
+    "Method": "GetAllOrdonnancesOfPatients",
+    "RelativePath": "api/Ordonnance/{id}/Patient",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.Ordonnance, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "MedicalApp.Controllers.PatientController",
     "Method": "CreatePatient",
     "RelativePath": "api/Patient",
@@ -338,7 +438,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Patient",
+        "Type": "MedicalApp.Metier.Patient",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -358,7 +458,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Patient, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.Patient, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -384,7 +484,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Patient",
+        "Type": "MedicalApp.Metier.Patient",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -409,7 +509,7 @@
       },
       {
         "Name": "patient",
-        "Type": "MedicalApp.Patient",
+        "Type": "MedicalApp.Metier.Patient",
         "IsRequired": true
       }
     ],
@@ -431,7 +531,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Patient",
+        "Type": "MedicalApp.Metier.Patient",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -451,13 +551,13 @@
     "Parameters": [
       {
         "Name": "login",
-        "Type": "MedicalApp.Controllers.LoginModel",
+        "Type": "MedicalApp.Controllers.PatientController\u002BLoginModel",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Patient",
+        "Type": "MedicalApp.Metier.Patient",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -483,7 +583,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.RendezVous, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.RendezVous, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -509,7 +609,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Praticien",
+        "Type": "MedicalApp.Metier.Praticien",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -529,7 +629,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Praticien, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.Praticien, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -555,7 +655,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Praticien",
+        "Type": "MedicalApp.Metier.Praticien",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -580,7 +680,7 @@
       },
       {
         "Name": "praticien",
-        "Type": "MedicalApp.Praticien",
+        "Type": "MedicalApp.Metier.Praticien",
         "IsRequired": true
       }
     ],
@@ -604,6 +704,32 @@
   },
   {
     "ContainingType": "MedicalApp.Controllers.PraticienController",
+    "Method": "GetPatientsByPraticien",
+    "RelativePath": "api/Praticien/{id}/patients",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.Patient, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MedicalApp.Controllers.PraticienController",
     "Method": "Login",
     "RelativePath": "api/Praticien/login",
     "HttpMethod": "POST",
@@ -618,7 +744,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.Praticien",
+        "Type": "MedicalApp.Metier.Praticien",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -644,7 +770,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.RendezVous, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[MedicalApp.Metier.RendezVous, MedicalApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -653,6 +779,27 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MedicalApp.API1.Controllers.ProfilMedicalController",
+    "Method": "UploadOrReplaceImageForPatient",
+    "RelativePath": "api/ProfilMedical/patient/{patientId}/image",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patientId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MedicalApp.Controllers.RendezVousController",
@@ -670,7 +817,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.RendezVous",
+        "Type": "MedicalApp.Metier.RendezVous",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -679,6 +826,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MedicalApp.Controllers.RendezVousController",
+    "Method": "GetAllRendezVous",
+    "RelativePath": "api/RendezVous",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MedicalApp.Controllers.RendezVousController",
@@ -696,7 +853,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "MedicalApp.RendezVous",
+        "Type": "MedicalApp.Metier.RendezVous",
         "MediaTypes": [
           "text/plain",
           "application/json",

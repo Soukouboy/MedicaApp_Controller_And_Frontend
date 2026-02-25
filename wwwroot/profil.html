@@ -1,3 +1,9 @@
+<head></head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mon Profil Médical</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
 <style>
     body {
         font-family: 'Roboto', Arial, sans-serif;
@@ -11,6 +17,9 @@
         background: #fff;
         border-radius: 18px;
         box-shadow: 0 4px 24px rgba(31,111,84,0.08);
+        margin: 40px auto;
+         margin-left: 100px;
+         margin-right: 40px;
         padding: 36px 32px 28px 32px;
         position: relative;
     }
@@ -96,24 +105,86 @@
             gap: 16px;
         }
         .profile-container {
-            padding: 24px 20px;
-            margin: 24px 16px;
+           
+            margin-left: 20px;
+            margin-right: 20px;
+
         }
     }
     @media (max-width: 480px) {
         .profile-container {
-            padding: 18px 12px;
+            padding: 20px 16px;
+            margin: 16px 8px;
         }
         .profile-header h1 {
             font-size: 1.6em;
         }
     }
+
+    #retour {
+                position: relative;
+                margin-top: auto;
+                margin-left: 600px;
+                margin-right: 100px;
+                margin-bottom: auto;
+                /* increased size: more padding and slightly larger text for better tap targets */
+                padding: 14px 20px;
+                font-size: 1rem;
+                background: #6f1f1f;
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(31, 111, 84, 0.18);
+                transition: background 0.2s, transform 0.1s;
+                max-width: 800px;
+                z-index: 1000;
+            }
+
+            /* Afficher l'image juste en bas de l'input de type file */
+            #imagePreview {
+                display: block;             /* ensure block-level positioning under the input */
+                margin: 8px auto 0 auto;    /* small gap and centered under the input */
+                width: 150px;               /* fixed preview size matching design */
+                height: auto;
+                text-align: center;
+            }
+
+            #imagePreview img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                border-radius: 50%;        /* circle preview */
+                display: block;
+            }
+            /* Style pour l'input de type file pour qu'il soit plus visible et plus attractif
+            et qu'il corresponde au design général
+             
+            */
+            #profilePicture {
+                display: block;
+                margin: 10px auto;
+                padding: 10px;
+                border: 2px dashed #1f6f54;
+                border-radius: 10px;
+                background: #f4f9f4;
+                cursor: pointer;
+                transition: border-color 0.2s;
+            }
 </style>
+</head>
+<body>
+    
 
 <div class="profile-container">
     <div class="profile-header">
-        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Photo de profil" class="profile-avatar">
-        <h1>Mon Profil Médical</h1>
+         <h1>Mon Profil Médical</h1>
+        <div class="form-group">
+            
+            <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+        <div id="imagePreview"  style="width: 150px; border-radius: 50%;">Image </div><!-- pour afficher l'image sélectionnée -->
+    </div>
+
         <p>Gérez et mettez à jour vos informations personnelles et médicales en toute sécurité.</p>
     </div>
     <form class="profile-form" method="post" id="profileForm">
@@ -203,88 +274,270 @@
      </div>
      </div>
 
-        <button type="submit">Enregistrer</button>
+        <button type="submit" id="enreigistrer">Enregistrer</button>
     </form>
- 
+
+
+    <h2><button id="retour" type="button">Retour au Dashboard</button></h2>
+</div>
+ </body>
 
     <script>
+        // Fonction pour récupérer les détails du patient depuis l'API à l'aide de son ID dans un evenement asynchrone DOMContentLoaded
     
-    /*
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+        async function loadPatientData(patientId) { 
+            try {
+                 const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`);
+                     if (!response.ok) throw new Error("Erreur lors du chargement des données du patient");
+                      const patient = await response.json(); console.log("Données du patient chargées:", patient);
+                      localStorage.setItem('password', patient.authentification?.password || ''); // Stocker le mot de passe dans localStorage
+                        
+                       // Remplir les champs du formulaire avec les données du patient 
+                        document.getElementById('nom').value = patient.nom || ''; 
+                        document.getElementById('prenom').value = patient.prenom || ''; 
+                       //  Convertir la date de naissance au format YYYY-MM-DD pour l'input de type date 
+                        const dateNaissance = new Date(patient.dateNaissance); 
+                        const formattedDate = dateNaissance.toISOString().split('T')[0];
+                         document.getElementById('dateNaissance').value = formattedDate || ''; 
+                        document.getElementById('sexe').value = patient.sexe || '';
+                         document.getElementById('pays').value = patient.adresse?.pays || ''; 
+                       // // Remplir le groupe sanguin 
+                        document.getElementById('groupSanguin').value = patient.profilMedical?.groupSanguin || '';
+                       //  // Joindre les allergies, traitements, et antécédents en chaînes séparées par des virgules 
+                        document.getElementById('allergies').value = patient.profilMedical?.allergies?.join(', ') || '';
+                         document.getElementById('antecedents').value = patient.profilMedical?.antecedents?.join(', ') || ''; 
+                        document.getElementById('email').value = patient.authentification?.email || ''; 
+                        document.getElementById('phone').value = patient.authentification?.num_telephone || ''; 
+                        document.getElementById('adresse').value = patient.adresse?.rue || 'Rue inconnue'; 
+                        document.getElementById('codePostal').value = patient.adresse?.codePostal || 'Code postal inconnu';
+                         document.getElementById('ville').value = patient.adresse?.ville || ' Ville inconnue'; 
+                            // Afficher l'image de profil si le chemin est disponible
+                         console.log("Image de profil chargée:",  patient.profilMedical?.profilePath);
+                if (patient.profilMedical?.profilePath) {
+                const imageUrl = patient.profilMedical.profilePath; // Ajustez selon la structure
+                const imgPreview = document.getElementById('imagePreview');
+                const base = 'http://localhost:5103/'; // Base URL de votre API ou serveur d'images
+                imgPreview.src = imageUrl;
+    //                imgPreview.alt = "Photo de profil";
+                     console.log("Image de profil chargée:",base+imageUrl);
+
+                       imgPreview.innerHTML = `<img src="${imageUrl}" alt="Profil">`;
+            }
+
+            }
+            catch (err) { 
+                            console.error("Erreur lors du chargement des données du patient:", err);
+            } 
+        } // Charger les données du patient lorsque la page se charge 
+
+        const patientId = localStorage.getItem('patientId'); // Assurez-vous que l'ID du patient est stocké dans localStorage
+       
+         loadPatientData(patientId); // Charger les données du patient
+
+
+            }); 
+
+
+        //     // Gestion de l'aperçu de l'image de profil
+        //     document.getElementById('profilePicture').addEventListener('change', function(event)
+        //     {
+        //         const file = event.target.files[0];
+        //         if (file) {
+        //             const reader = new FileReader();
+        //             reader.onload = function(e) {
+        //                 const img = document.createElement('img');
+        //                 img.src = e.target.result;
+        //                 const preview = document.getElementById('imagePreview');
+        //                 preview.innerHTML = '';
+        //                 preview.appendChild(img);
+        //             };
+        //             reader.readAsDataURL(file);
+        //         }
+        //     });
+        // Gestion du bouton retour
+        document.getElementById('retour').addEventListener('click', function() {
+            window.location.href = 'dashboard-patient.html'; // Rediriger vers le tableau de bord du patient
+        });
+
+        // if(document.getElementById('enreigistrer')) {
+        // document.getElementById('enreigistrer').addEventListener('click',
+        //     async function(event) {
+        //         event.preventDefault(); // Empêcher le comportement par défaut du formulaire
     
-        
-document.getElementById("profileForm").addEventListener('submit', async function(event) {
-         event.preventDefault(); // Empêche la soumission par défaut  
-            // Récupérer l'ID du patient depuis localStorage
-            // Assurez-vous que l'ID du patient est stocké dans localStorage
-            console.log("ID du patient récupéré depuis localStorage:", localStorage.getItem('patientId'));
-         // Afficher le mot de passe global pour débogage
-         const patientId = localStorage.getItem('patientId'); // Assurez-vous que l'ID du patient est stocké dans localStorage
-         const password_global = localStorage.getItem('password'); // Récupérer le mot de passe depuis localStorage
-         console.log("Mot de passe récupéré depuis localStorage:", password_global);     
-         const formData = {
-                patientID: patientId, // Assurez-vous que l'ID du patient est stocké dans localStorage
-            nom: document.getElementById('nom').value,
-            prenom: document.getElementById('prenom').value,
-                adresse:{
-                    rue: document.getElementById('adresse').value,
-                    ville: document.getElementById('ville').value,
-                     codePostal: document.getElementById('codePostal').value,
-                    pays: document.getElementById('pays').value,   
-                },
-                dateNaissance: document.getElementById('dateNaissance').value,
-                authentification:{
-                    email: document.getElementById('email').value,
-                    password:password_global, // Assurez-vous que le mot de passe est géré correctement
-                    num_telephone: document.getElementById('phone').value,
-                },
-                profilMedical:{
-                    allergies: document.getElementById('allergies').value  ? document.getElementById('allergies').value.split(',').map(item => item.trim()):[],
+        //         const patientId = localStorage.getItem('patientId');
     
-                    antecedents: document.getElementById('antecedents').value ? document.getElementById('antecedent').value.split(',').map(item => item.trim()):[],
-                    groupSanguin: document.getElementById('groupSanguin').value,
-                },
-                sexe:document.getElementById('sexe').value,
+        //         // Récupérer les valeurs des champs du formulaire
+        //         const nom = document.getElementById('nom').value;
+        //         const prenom = document.getElementById('prenom').value;
+        //         const dateNaissance = document.getElementById('dateNaissance').value;
+        //         const sexe = document.getElementById('sexe').value;
+        //         const pays = document.getElementById('pays').value;
+        //         const adresseRue = document.getElementById('adresse').value;
+        //         const codePostal = document.getElementById('codePostal').value;
+        //         const ville = document.getElementById('ville').value;
+        //         const groupSanguin = document.getElementById('groupSanguin').value;
+        //         const email = document.getElementById('email').value;
+        //         const allergies = document.getElementById('allergies').value.split(',').map(item => item.trim()).filter(item => item);
+        //         const antecedents = document.getElementById('antecedents').value.split(',').map(item => item.trim()).filter(item => item);
+        //         const phone = document.getElementById('phone').value;
+    
+        //         const password = localStorage.getItem('password') || '';
+    
+        //         // Construire l'objet patient à envoyer
+        //         const patientData = {
+        //             nom: nom,
+        //             prenom: prenom,
+        //             dateNaissance: dateNaissance,
+        //             sexe: sexe,
+        //             adresse: {
+        //                 pays:  pays,
+        //                 rue: adresseRue,
+        //                 codePostal: codePostal,
+        //                 ville: ville
+        //             },
+        //             profilMedical: {
+        //                 groupSanguin: groupSanguin,
+        //                 allergies: allergies,
+        //                 antecedents: antecedents
+        //             },
+        //             authentification: {
+        //                 email: email,
+        //                 password: password,
+        //                 num_telephone: phone
+        //             }
+        //         };
+    
+        //         try {
+        //             // Envoyer la requête PUT pour mettre à jour les informations du patient
+        //             const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`, {
+        //                 method: 'PUT',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify(patientData)
+        //             });
+    
+        //             if (!response.ok) {
+        //                 throw new Error('Erreur lors de la mise à jour des informations du patient');
+        //             }
+        //             const result = await response.json();
+        //             console.log("Patient mis à jour avec succès:", result);
+        //             alert('Informations mises à jour avec succès !');
+        //         } catch (error) {
+        //             console.error('Erreur:', error);
+        //             alert('Une erreur est survenue lors de la mise à jour des informations.');
+        //         }
+        //     });
+        // }
 
-          };
-            // Afficher les données dans la console (ou envoyer à un serveur)
-            console.log('Données du formulaire:', formData);
-            
-           try{
-            // Envoyer les données au serveur
-            const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`, {
-                method: 'PUT', // Utilisez PUT pour mettre à jour les données
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
 
-            if (!response.ok) {
-                const errorData = await response.text(); // Récupérez le texte de la réponse d'erreur
-                console.error("Détails de l'erreur :", errorData);
-                throw new Error(`Erreur HTTP! statut: ${response.status}`);
-            }  
 
-            const result = await response.json();
-          console.log("Patient ajouté avec succès:", result);
-            alert("Vos données sont modifier avec succès!");
-         
- 
+        // fonction pour uploader l'image et récupérer le path/url
+async function uploadProfileImage(patientId, file) {
+    if (!file) return null;
 
-           }
-              catch (error) {
-                 console.error("Erreur lors de l'ajout du patient:", error);
-                 alert(`Erreur lors de l'ajout du patient: ${error.message}`);
-                }
-            
-            // A 
-             
-            
-         
+    const formData = new FormData();
+    formData.append('file', file); // côté backend on lit IFormFile file
+
+    // n'ajoute PAS Content-Type : fetch le gère automatiquement pour FormData
+    const res = await fetch(`http://localhost:5103/api/profilmedical/patient/${patientId}/image`, {
+        method: 'PUT',
+        body: formData,
+        credentials: 'same-origin' // si tu utilises cookies/auth
     });
-    */
 
-    
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error('Échec upload image : ' + (text || res.status));
+    }
+
+    // réponse attendue : { path: 'uploads/..', url: 'http://...' }
+    return await res.json();
+}
+
+// Remplacer ton handler d'enregistrement par ceci :
+document.getElementById('enreigistrer').addEventListener('click', async function(event) {
+    event.preventDefault();
+
+    const patientId = localStorage.getItem('patientId');
+    if (!patientId) { alert('Patient non identifié'); return; }
+
+    // Récupérer valeurs du formulaire (comme avant)
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const dateNaissance = document.getElementById('dateNaissance').value;
+    const sexe = document.getElementById('sexe').value;
+    const pays = document.getElementById('pays').value;
+    const adresseRue = document.getElementById('adresse').value;
+    const codePostal = document.getElementById('codePostal').value;
+    const ville = document.getElementById('ville').value;
+    const groupSanguin = document.getElementById('groupSanguin').value;
+    const email = document.getElementById('email').value;
+    const allergies = document.getElementById('allergies').value.split(',').map(i=>i.trim()).filter(Boolean);
+    const antecedents = document.getElementById('antecedents').value.split(',').map(i=>i.trim()).filter(Boolean);
+    const phone = document.getElementById('phone').value;
+    const password = localStorage.getItem('password') || '';
+
+    // Construire l'objet patient (comme tu fais déjà)
+    const patientData = {
+        patientID:patientId,
+        nom, prenom, dateNaissance, sexe,
+        adresse: { pays, rue: adresseRue, codePostal, ville },
+        profilMedical: { groupSanguin, allergies, antecedents },
+        authentification: { email, password, num_telephone: phone }
+    };
+
+    try {
+        // 1) Si un fichier est sélectionné, upload d'abord
+        const fileInput = document.getElementById('profilePicture');
+        const file = fileInput?.files?.[0];
+        if (file) {
+            // validations côté client (optionnel mais utile)
+            const allowed = ['image/jpeg','image/png','image/jpg'];
+            if (!allowed.includes(file.type)) {
+                alert('Format d\'image non autorisé (png/jpg).');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) { // 5MB limite exemple
+                alert('Image trop volumineuse (max 5MB).');
+                return;
+            }
+
+            const uploadResult = await uploadProfileImage(patientId, file);
+            // uploadResult.path ou uploadResult.url selon ton backend
+//            patientData.profilMedical.profilPath = uploadResult.path || uploadResult.url;
+            // si tu veux afficher immédiatement l'image renvoyée :
+            const preview = document.getElementById('imagePreview');
+            if (uploadResult.url && preview) {
+                preview.innerHTML = `<img src="${uploadResult.url}" alt="Profil">`;
+            }
+        }
+
+        // 2) Envoyer la mise à jour du patient (PUT)
+        const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(patientData)
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error('Erreur mise à jour patient : ' + (errText || response.status));
+        }
+
+        const result = await response.json();
+        console.log('Patient mis à jour:', result);
+        alert('Informations mises à jour avec succès !');
+    } catch (err) {
+        console.error(err);
+        alert('Une erreur est survenue : ' + err.message);
+    }
+});
+
     </script>
 
-</div>
+</html>
+

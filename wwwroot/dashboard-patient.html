@@ -7,6 +7,219 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="dash-med-style.css">
         <link rel="icon" href="logo.png" type="image/x-icon">
+        <style>
+            .patient-info img {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+
+            .ai-chat {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+}
+
+#user-input {
+    flex: 1;
+    padding: 12px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#user-input:focus {
+    border-color: #4facfe;
+}
+
+#send-btn {
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+#send-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===== Styles pour les messages (respecte votre structure) ===== */
+.message {
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.message-header i {
+    font-size: 1rem;
+}
+
+.message-content {
+    padding: 12px 16px;
+    border-radius: 15px;
+    line-height: 1.5;
+    max-width: 80%;
+}
+
+.user-message .message-content {
+    background: #0084ff;
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
+}
+
+.ai-message .message-content {
+    background: white;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-bottom-left-radius: 5px;
+}
+
+/* ===== Styles pour les cartes de recommandation ===== */
+.specialty-card {
+    background: #f8f9ff;
+    border-left: 5px solid #4facfe;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.specialty-card.priority-high {
+    border-left-color: #dc3545;
+    background: #fff5f5;
+}
+
+.specialty-card.priority-medium {
+    border-left-color: #ffc107;
+    background: #fffbf0;
+}
+
+.specialty-card.priority-low {
+    border-left-color: #28a745;
+    background: #f0fff4;
+}
+
+.confidence-badge {
+    float: right;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.symptoms-highlight {
+    background: #fff3cd;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.disclaimer {
+    background: #fff9c4;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* ===== Typing indicator ===== */
+.typing-indicator {
+    display: inline-flex;
+    gap: 5px;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    width: fit-content;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4facfe;
+    animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-8px); }
+}
+
+.error-message {
+    background: #fee;
+    color: #c33;
+    border-left: 4px solid #c33;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+
+        </style>
    
 </head>
 <body>
@@ -14,8 +227,9 @@
         <!-- Sidebar Navigation -->
         <div class="sidebar">
             <div class="logo">
-                <i class="fas fa-hospital-alt"></i>
-                <span>SmartHealth</span>
+                <a href="index.html">
+                <img src="logo.png" alt="SmartHealth Logo" class="logo-image">
+                </a>
             </div>
            <nav>
                 <ul>
@@ -27,7 +241,7 @@
                     <li> <i class="fas fa-cog"></i> <button type="button" id="Parametres"> Paramètres </button> </li>
                 </ul>
                 <ul class="logout">
-                    <li style="margin-bottom: 650px;"> <i class="fas fa-sign-out-alt" id="deconnexion"></i> <button id="btnDeconnexion" > Déconnexion</button></li>
+                    <li> <i class="fas fa-sign-out-alt" id="deconnexion"></i> <button id="btnDeconnexion" > Déconnexion</button></li>
                 </ul>
             </nav>
         </div>
@@ -40,10 +254,12 @@
                     <input type="text" placeholder="Rechercher un Medecin...">
                     <button><i class="fas fa-search"></i></button>
                 </div>
-                <div class="user-profile">
-                    <span>Bienvenue --</span>
-                    <h3 id="Sexe-patient">Mr/Mme Patient</h3>
-                </div>
+                <div class="patient-info">
+                    <h3 id="patient_nom" style="border-top: 10%; text-align: center;">Patient Name</h3>
+                    <img id="patient_avatar" src="" alt="Patient Avatar">
+                    
+                
+    </div>
             </header>
 
            <div class="content">
@@ -54,7 +270,7 @@
                         <div class="patient-card">
                             <div class="patient-header">
                                 <div>
-                                    <h3 id="patient_nom"></h3>
+                                    <!-- <h3 id="patient_nom"></h3> -->
                                    <strong>Groupe Sanguin: <p id="Groupsanguin"> </p></strong>
                                      
                                 </div>

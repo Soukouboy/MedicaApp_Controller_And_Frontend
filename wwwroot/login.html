@@ -3,151 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Patient / Praticien</title>
-        <link rel="icon" href="logo.png" type="image/x-icon">
-
+    <title>Connexion - SantéConnect</title>
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    
+    <!-- Polices modernes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* --------- Réinitialisation --------- */
+        /* ========== RÉINITIALISATION ET BASE ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        .title-login {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #2f8f6f;
-        }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f0f4f8;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            padding: 20px;
         }
 
-        /* --------- Conteneur du formulaire --------- */
+        /* ========== CONTENEUR PRINCIPAL ========== */
         .login-container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
         }
 
-        .login-container h2 {
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* ========== LOGO ET TITRE ========== */
+        .logo-section {
             text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+            margin-bottom: 30px;
         }
 
-        /* --------- Champs --------- */
-        .form-group {
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #09d18e 0%, #00c6fb 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
             margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(47, 143, 111, 0.3);
         }
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+        h1 {
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        select, input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+        .subtitle {
+            color: #718096;
             font-size: 14px;
         }
 
-        /* --------- Messages d'erreur --------- */
-        .error {
-            color: red;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none; /* Caché par défaut */
+        /* ========== CHAMPS DE FORMULAIRE ========== */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
         }
 
-        /* --------- Bouton --------- */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Style des champs */
+        select, input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        /* Icônes dans les champs */
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            transition: color 0.3s ease;
+        }
+
+        /* États des champs */
+        select:focus, input:focus {
+            outline: none;
+            border-color: #2f8f6f;
+            box-shadow: 0 0 0 3px rgba(47, 143, 111, 0.1);
+        }
+
+        select:focus + .input-icon, 
+        input:focus + .input-icon {
+            color: #2f8f6f;
+        }
+
+        select:hover, input:hover {
+            border-color: #cbd5e0;
+        }
+
+        /* ========== MESSAGES D'ERREUR ========== */
+        .error {
+            color: #e53e3e;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            padding-left: 5px;
+        }
+
+        .error.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Validation positive */
+        input.valid {
+            border-color: #38a169;
+        }
+
+        /* ========== BOUTON DE CONNEXION ========== */
         button {
             width: 100%;
-            padding: 10px;
-            background: #2f8f6f;
+            padding: 14px;
+            background: linear-gradient(135deg, #2f8f6f 0%, #00c6fb 100%);
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             color: white;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(47, 143, 111, 0.3);
         }
 
         button:hover {
-            background: #00c6fb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(47, 143, 111, 0.4);
         }
 
-        /* --------- Lien --------- */
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ========== LIEN MOT DE PASSE OUBLIÉ ========== */
         .forgot-password {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .forgot-password a {
-            color: #4facfe;
+            color: #2f8f6f;
             text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .forgot-password a:hover {
+            color: #00c6fb;
             text-decoration: underline;
+        }
+
+        /* ========== SÉPARATEUR (OPTIONNEL) ========== */
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #718096;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+
+        /* ========== ACCESSIBILITÉ ========== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Classe pour cacher visuellement mais garder accessible */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
         }
     </style>
 </head>
 <body>
-
-    <!-- --------- Formulaire --------- -->
+    
+     
+    <!-- ========== FORMULAIRE DE CONNEXION ========== -->
     <div class="login-container">
-        <h2 class="title-login">Connexion</h2>
+        <!-- Logo et titre -->
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h1>Connexion</h1>
+            <p class="subtitle">Accédez à votre espace personnel</p>
+        </div>
+        <div class="message" style="color: red; text-align: center; margin-bottom: 15px; display: none;"> Votre Email ou Mot de Passe sont incorrects </div>
 
-        <form id="loginForm" novalidate> <!-- novalidate désactive la validation HTML par défaut -->
-
+        <form id="loginForm" novalidate>
+            
             <!-- Sélection du rôle -->
             <div class="form-group">
-                <label for="role">Rôle</label>
-                <select id="role" name="role">
-                    <option value="">-- Sélectionnez votre rôle --</option>
-                    <option value="patient">Patient</option>
-                    <option value="praticien">Praticien</option>
-                </select>
+                <label for="role">Vous êtes</label>
+                <div style="position: relative;">
+                    <select id="role" name="role" required>
+                        <option value="">-- Sélectionnez votre rôle --</option>
+                        <option value="patient" selected>Patient</option>
+                        <option value="praticien">Praticien</option>
+                    </select>
+                    <i class="fas fa-user-tag input-icon"></i>
+                </div>
                 <div class="error" id="roleError">Veuillez sélectionner un rôle.</div>
             </div>
 
             <!-- Email -->
             <div class="form-group">
                 <label for="email">Adresse e-mail</label>
-                <input type="email" id="email" name="email" placeholder="exemple@mail.com">
+                <div style="position: relative;">
+                    <input type="email" id="email" name="email" placeholder="exemple@mail.com" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
                 <div class="error" id="emailError">Veuillez entrer un email valide.</div>
             </div>
 
             <!-- Mot de passe -->
             <div class="form-group">
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" placeholder="Votre mot de passe">
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" placeholder="Votre mot de passe" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
                 <div class="error" id="passwordError">Veuillez entrer un mot de passe (min. 6 caractères).</div>
             </div>
 
-            <!-- Bouton -->
-            <button type="submit">Se connecter</button>
+            <!-- Bouton de connexion -->
+            <button type="submit">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
 
-            <!-- Mot de passe oublié -->
+            <!-- Lien mot de passe oublié -->
             <div class="forgot-password">
-                <a href="#">Mot de passe oublié ?</a>
+                <a href="#">
+                    <i class="fas fa-question-circle"></i> Mot de passe oublié ?
+                </a>
             </div>
         </form>
     </div>
 
- <script src="login.js" defer></script>
-
+    <script src="login.js" defer></script>
 </body>
 </html>

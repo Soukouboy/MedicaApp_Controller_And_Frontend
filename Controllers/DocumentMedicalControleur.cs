@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MedicalApp;
 using MedicalApp.API1.DTO;
+using MedicalApp.Services;
+using MedicalApp.Metier;
 
 
 namespace MedicalApp.API1.Controllers

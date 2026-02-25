@@ -14,7 +14,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                 body: JSON.stringify({ email, password })
             });
             if (!response.ok) {
-                alert("Identifiants incorrects !");
+                document.querySelector(".message").style.display = "block";
                 return;
             }
 
@@ -47,7 +47,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                 body: JSON.stringify({ email, password })
             });
             if (!response.ok) {
-                alert("Identifiants incorrects !");
+                document.querySelector(".message").style.display = "block";
                 return;
             }
             const medecin = await response.json();

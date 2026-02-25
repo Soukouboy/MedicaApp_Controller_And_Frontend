@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using MedicalApp;
 using MedicalApp.API1.DTO;
+using MedicalApp.Metier;
+using MedicalApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalApp.Controllers
@@ -12,15 +13,17 @@ namespace MedicalApp.Controllers
     public class PatientController : ControllerBase
     {
         private readonly PatientService _patientService;  // Changement pour l'interface (meilleure pratique)
+     //   private readonly IConfiguration _configuration;
 
         // Modification : Utilisation d'une interface pour le découplage et la testabilité
-        public PatientController(PatientService patientService)
+        public PatientController(PatientService patientService )
         {
             _patientService = patientService;
+            
         }
 
         [HttpPost]
-        public async Task<ActionResult<Patient>> CreatePatient([FromBody] PatientDTO  patient)
+        public async Task<ActionResult<Patient>> CreatePatient([FromBody] PatientDTO patient)
         {
             // Nouveau : Validation du modèle avant traitement
             if (!ModelState.IsValid)
@@ -28,7 +31,7 @@ namespace MedicalApp.Controllers
 
             try
             {
-                Patient patient1= new Patient(patient.Nom,patient.Prenom,patient.dateNaissance,patient.adresse,patient.authentification,patient.ProfilMedical,patient.sexe);
+                Patient patient1 = new Patient(patient.Nom, patient.Prenom, patient.dateNaissance, patient.adresse, patient.authentification, patient.ProfilMedical, patient.sexe);
                 var created = await _patientService.CreatePatientAsync(patient1);
                 // Correction : "PatientId" au lieu de "PatientID" pour correspondre au nom standard
                 return CreatedAtAction(nameof(GetPatientById), new { id = created.PatientID }, created);
@@ -60,6 +63,7 @@ namespace MedicalApp.Controllers
             try
             {
                 var patient = await _patientService.GetPatientByIdAsync(id);
+             //   patient.ProfilMedical.ProfilePath = patient.ProfilMedical.GetProfilePictureUrl(_configuration);
                 return patient == null ? NotFound() : Ok(patient);
             }
             catch (Exception ex)
@@ -78,10 +82,40 @@ namespace MedicalApp.Controllers
             if (id != patient.PatientID)
                 return BadRequest("ID mismatch");
 
+            var patientExists = await _patientService.GetPatientByIdAsync(id);
+            patientExists.authentification.num_telephone=patient.authentification.num_telephone; // Numero de téléphone mis à jour
+            patientExists.authentification.email=patient.authentification.email; // Email mis à jour
+            // patientExists.authentification.password=patient.authentification.password; // Mot de passe mis à jour
+
+
+
+            patientExists.Nom=patient.Nom;  // Nom mis à jour
+            patientExists.Prenom=patient.Prenom;// Prenom mis à jour
+            patientExists.sexe=patient.sexe;// Sexe mis à jour
+            patientExists.dateNaissance=patient.dateNaissance;// Date de naissance mis à jour
+
+
+
+            patientExists.adresse.pays=patient.adresse.pays;// Pays mis à jour
+            patientExists.adresse.ville=patient.adresse.ville;// Ville mis à jour
+            patientExists.adresse.codePostal=patient.adresse.codePostal;// Code postal mis à jour
+            patientExists.adresse.rue=patient.adresse.rue;// Rue mis à jour
+
+
+            patientExists.ProfilMedical.groupSanguin = patient.ProfilMedical.groupSanguin;// Groupe sanguin mis à jour
+            patientExists.ProfilMedical.allergies = patient.ProfilMedical.allergies;// Allergies mis à jour
+         //   patientExists.ProfilMedical.ProfilePath= patient.ProfilMedical.ProfilePath;// Chemin de l'image de profil mis à jour
+            patientExists.ProfilMedical.Antecedents = patient.ProfilMedical.Antecedents;// Antécédents mis à jour
+
+
+
+
+
+
             try
             {
-                await _patientService.UpdatePatientAsync(patient);
-                return NoContent();
+                await _patientService.UpdatePatientAsync(patientExists);
+                return Ok(patientExists);
             }
             catch (KeyNotFoundException)
             {
@@ -101,11 +135,11 @@ namespace MedicalApp.Controllers
                 var deleted = await _patientService.DeletePatientAsync(id);
 
                 // Nouveau : Gestion du cas où l'entité n'existe pas
-              if(deleted is null)
+                if (deleted is null)
                 {
                     return NotFound();
                 }
-              return Ok(deleted);
+                return Ok(deleted);
             }
             catch (Exception ex)
             {
@@ -147,16 +181,19 @@ namespace MedicalApp.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-    }
 
-    public class LoginModel
-    {
-        [Required]
-        [EmailAddress]  // Nouveau : Validation du format email
-        public string Email { get; set; }
+   
+   
 
-        [Required]
-        [StringLength(100, MinimumLength = 8)]  // Nouveau : Politique de mot de passe
-        public string Password { get; set; }
+        public class LoginModel
+        {
+            [Required]
+            [EmailAddress]  // Nouveau : Validation du format email
+            public string Email { get; set; }
+
+            [Required]
+            [StringLength(100, MinimumLength = 8)]  // Nouveau : Politique de mot de passe
+            public string Password { get; set; }
+        }
     }
 }

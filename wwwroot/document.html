@@ -10,63 +10,71 @@
 <body>
 
   <!-- Section Documents Médicaux seulement -->
-  <section class="documents-section">
-    <h2><i class="fas fa-file-medical"></i> Documents Médicaux</h2>
-    <div class="documents-grid">
+ <section class="documents-section">
+  <h2><i class="fas fa-file-medical"></i> Mes ordonnances</h2>
+  <div id="ordoGrid" class="documents-grid">
+    <!-- cartes injectées ici -->
+  </div>
+</section>
 
-      <!-- Exemple 1 : PDF -->
-      <div class="document-card">
-        <i class="fas fa-file-pdf"></i>
-        <span>Compte-rendu 12/10/2023</span>
-        <!-- Le lien "href" doit pointer vers le vrai fichier -->
-        
-          <button type="button" id="ordonnance_pdf_doc">Télécharger</button>
-        
-      </div>
-
-      <!-- Exemple 2 : Radiographie -->
-      <div class="document-card">
-        <i class="fas fa-file-image"></i>
-        <span>Radiographie 05/10/2023</span>
-        <a href="dsk.jpg" download>
-          <button>Télécharger</button>
-        </a>
-      </div>
-
-      <!-- Exemple 3 : Ordonnance -->
-      <div class="document-card">
-        <i class="fas fa-file-prescription"></i>
-        <span>Ordonnance 01/10/2023</span>
-        <a href="documents/ordonnance-01-10-2023.pdf" download>
-          <button>Télécharger</button>
-        </a>
-      </div>
-
-    </div>
-  </section>
 
   <script>
-    // Si tu veux dynamiser avec ton API plus tard :
-    // Exemple avec fetch()
-    
-    fetch("http://localhost:5103/api/Documents")
-      .then(res => res.json())
-      .then(docs => {
-        const container = document.querySelector(".documents-grid");
-        container.innerHTML = "";
-        docs.forEach(doc => {
-          container.innerHTML += `
-            <div class="document-card">
-              <i class="fas ${doc.icon}"></i>
-              <span>${doc.nom}</span>
-              <a href="${doc.url}" download>
-                <button>Télécharger</button>
-              </a>
-            </div>
-          `;
-        });
-      });
-    
+          const idPatient = localStorage.getItem('patientId');   // à récupérer dans le JWT, l'URL, etc.
+
+      /* 1. Chargement de la liste des ordonnances */
+      async function loadOrdonnances() {
+        try {
+          const res = await fetch(`http://localhost:5103/api/Ordonnance/${idPatient}/Patient`);
+          if (!res.ok) throw new Error("Erreur réseau");
+          const liste = await res.json();
+          console.log(liste);
+
+          const grid = document.getElementById('ordoGrid');
+          grid.innerHTML = '';          // vide l'ancien contenu
+
+          liste.forEach(ordo => {
+            const card = document.createElement('div');
+            card.className = 'document-card';
+            card.innerHTML = `
+              <i class="fas fa-file-prescription" style="color:#2f8f6f;"></i>
+              <span>Ordonnance du ${new Date(ordo.dateCreation).toLocaleDateString()}</span>
+              <button onclick="genererPDF(${ordo.idDocument})">
+                <i class="fa fa-download"></i> Générer le PDF
+              </button>
+            `;
+            grid.appendChild(card);
+          });
+        } catch (e) {
+          console.error(e);
+          alert("Impossible de charger les ordonnances.");
+        }
+      }
+
+      /* 2. Génération + téléchargement du PDF */
+      async function genererPDF(idDoc) {
+        try {
+          const res = await fetch(`http://localhost:5103/api/ordonnances/${idDoc}/download`, {
+            method: 'POST',
+            headers: { 'Accept': 'application/pdf' }
+          });
+          if (!res.ok) throw new Error("Génération impossible");
+
+          const blob = await res.blob();                 // bytes du PDF
+          const url  = window.URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href     = url;
+          a.download = `Ordonnance_${idDoc}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        } catch (e) {
+          alert("Erreur lors de la création du PDF.");
+        }
+      }
+
+      /* 3. Au chargement de la page */
+      document.addEventListener('DOMContentLoaded', loadOrdonnances);
   </script>
 
 </body>

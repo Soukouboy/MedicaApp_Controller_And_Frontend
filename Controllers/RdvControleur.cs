@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using MedicalApp;
+using MedicalApp.Metier;
+using MedicalApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalApp.Controllers
@@ -147,6 +148,20 @@ namespace MedicalApp.Controllers
                 return StatusCode(500, $"Erreur serveur : {ex.Message}");
             }
         }
+        [HttpGet]
+        public async Task<ActionResult> GetAllRendezVous()
+        {
+            try
+            {
+                var rdvs = await _rvService.GetAllRdvAsync();
+                return Ok(rdvs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erreur serveur : {ex.Message}");
+            }
+        }
+
 
         /// <summary>
         /// Modèles de données avec validations étendues

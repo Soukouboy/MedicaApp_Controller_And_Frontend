@@ -1,4 +1,6 @@
-﻿namespace MedicalApp.API1.DTO
+﻿using MedicalApp.Metier;
+
+namespace MedicalApp.API1.DTO
 {
     public class RdvDTO
     {

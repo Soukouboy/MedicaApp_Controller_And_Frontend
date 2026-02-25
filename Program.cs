@@ -1,10 +1,12 @@
-using MedicalApp;
+using MedicalApp.API1;
 using MedicalApp.Notification;
 using MedicalApp.PdfGenerator;
+using MedicalApp.Repositories;
+using MedicalApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
-using AppContext = MedicalApp.AppContext;
+using AppContext = MedicalApp.Metier.MedicalAppContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +31,7 @@ builder.Services.AddCors(options =>
 
 
 // 1) Enregistrez d’abord votre DbContext (si non fait)
-builder.Services.AddDbContext<AppContext>(options =>
+builder.Services.AddDbContext<MedicalApp.Metier.MedicalAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 2) Enregistrez le repository générique
@@ -37,6 +39,14 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IRendezVousRepository, RendezVousRepository>();
 builder.Services.AddScoped<INotificationFactory, NotificationFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFileStorage, FileStorage>();
+builder.Services.AddScoped<IAdminRepo, AdminRepo>();
+
+builder.Services.AddHttpClient<IDiagnoseService, DiagnoseService>(client =>
+{
+    // Configuration de base du HttpClient si nécessaire
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 // 3) Enregistrez vos services métiers
 builder.Services.AddScoped<PatientService>();
 builder.Services.AddScoped<PraticienService>();
@@ -45,6 +55,9 @@ builder.Services.AddScoped<DocumentMedicalService>();
 builder.Services.AddScoped<OrdonnanceService>();
 builder.Services.AddScoped<MedicamentService>();
 builder.Services.AddScoped<PdfService>();
+builder.Services.AddScoped<ProfilMedicalService>();
+builder.Services.AddScoped<FileStorage>();
+builder.Services.AddScoped<AdminService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

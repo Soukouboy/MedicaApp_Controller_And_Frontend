@@ -114,6 +114,26 @@
             font-size: 1.1em;
             margin-bottom: 18px;
         }
+
+         #retour {
+                position: fixed;
+                margin-top: auto;
+                margin-left: 600px;
+                margin-right: 100px;
+                margin-bottom: auto;
+                /* increased size: more padding and slightly larger text for better tap targets */
+                padding: 14px 20px;
+                font-size: 1rem;
+                background: #6f1f1f;
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(31, 111, 84, 0.18);
+                transition: background 0.2s, transform 0.1s;
+                max-width: 800px;
+                z-index: 1000;
+            }
     </style>
 </head>
 <body>
@@ -130,6 +150,8 @@
         </form>
         <div id="ordonnanceSuccess" class="success-msg" style="display:none;"></div>
     </div>
+
+     <button id="retour">Retour</button>
      <script>
         let medicaments = [];
         function createMedRow() {
@@ -175,63 +197,85 @@
             document.getElementById('medList').appendChild(createMedRow());
         };
 
-        document.getElementById('ordonnanceForm').onsubmit = function(e) {
-            e.preventDefault();
-            // Récupérer les données
-            const meds = [];
-            document.querySelectorAll('.med-row').forEach(row => {
-                const select = row.querySelector('select');
-                const quantite = row.querySelector('input[type="number"]:nth-of-type(1)');
-                const nbUtil = row.querySelector('input[type="number"]:nth-of-type(2)');
-                if (select.value && quantite.value && nbUtil.value) {
-                    meds.push({
-                        medicamentId: select.value,
-                        quantite: quantite.value,
-                        nbUtilisation: nbUtil.value
-                    });
-                }
-            });
-            if (meds.length === 0) {
-                alert("Veuillez ajouter au moins un médicament à l'ordonnance.");
-                return;
-            }
-            // Ici, tu peux envoyer les données à l'API
-            document.getElementById('ordonnanceSuccess').style.display = 'block';
-            document.getElementById('ordonnanceSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Ordonnance enregistrée avec succès !`;
-            this.reset();
-            // Réajouter une ligne vide
-            document.getElementById('medList').innerHTML = '<label>Médicaments à prescrire :</label>';
-            document.getElementById('medList').appendChild(createMedRow());
-            const btn_submit=document.getElementById("submitOrdonnance");
-            if(btn_submit){
-                btn_submit.addEventListener("click",async ()=>{
-                    try{
-                        const response=await fetch("http://localhost:5103/api/Ordonnance",{
-                            method:"POST",
-                            headers:{"Content-Type":"application/json"},
-                            body:JSON.stringify({
-                                medicaments:meds,
-                                date: new Date().now(),
-                                renouvellementsRestants:2,
-                                id_rendezvous:1
-                            })
-                        });
-                        if(!response.ok) throw new Error("Erreur lors de l'enregistrement de l'ordonnance");
-                        const result=await response.json();
-                        document.getElementById('ordonnanceSuccess').style.display = 'block';
-                        document.getElementById('ordonnanceSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Ordonnance enregistrée avec succès !`;
-                        this.reset();
-                        // Réajouter une ligne vide
-                        document.getElementById('medList').innerHTML = '<label>Médicaments à prescrire :</label>';
-                        document.getElementById('medList').appendChild(createMedRow());
-                    }catch(err){
-                        console.error("Erreur :", err);
-                        alert("Erreur lors de l'enregistrement de l'ordonnance.");
-                    }
 
-                 });
-            }
-        };
-    </script>
+        document.getElementById('ordonnanceForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const rdvId=localStorage.getItem("rdvId");
+    const meds = [];
+    document.querySelectorAll('.med-row').forEach(row => {
+        const select = row.querySelector('select');
+        const quantite = row.querySelector('input[type="number"]:nth-of-type(1)');
+        const nbUtil = row.querySelector('input[type="number"]:nth-of-type(2)');
+
+        if (select.value && quantite.value && nbUtil.value) {
+            meds.push({
+                idMedicament: parseInt(select.value),
+                quantitePrescrite: parseInt(quantite.value),
+                nombreUsageJour: parseInt(nbUtil.value)
+            });
+            console.log("Médicament ajouté à la liste:", {
+                idMedicament: select.value,
+                quantitePrescrite: quantite.value,
+                nombreUsageJour: nbUtil.value
+            });
+        }
+        else {
+            console.log("Ligne ignorée car incomplète:", {
+                select: select.value,
+                quantite: quantite.value,
+                nbUtil: nbUtil.value
+            });
+        }
+ 
+    });
+
+    if (meds.length === 0) {
+        alert("Veuillez ajouter au moins un médicament à l'ordonnance.");
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5103/api/Ordonnance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                medicamentPrescription: meds,
+                date: new Date().toISOString(),
+                renouvellementsRestants: 2,
+                id_rendezvous: rdvId
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erreur lors de l\'enregistrement');
+        }
+
+        const result = await response.json();
+        console.log("Ordonnance enregistrée :", result);
+        
+        // Afficher le message de succès APRÈS la confirmation du serveur
+        document.getElementById('ordonnanceSuccess').style.display = 'block';
+        document.getElementById('ordonnanceSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Ordonnance enregistrée avec succès !`;
+        
+        // Réinitialiser le formulaire
+        document.getElementById('medList').innerHTML = '<label>édicaments à prescrire :</label>';
+        document.getElementById('medList').appendChild(createMedRow());
+        
+    } catch (err) {
+        console.error("Erreur :", err);
+        alert(`Erreur lors de l'enregistrement: ${err.message}`);
+    }
+};
+// Bouton retour pour revenir à la page précédente
+if(document.getElementById("retour")){
+    document.getElementById("retour").addEventListener("click",()=>{
+        window.history.back();
+    });
+}
+
+   </script>
 </body>
 </html>

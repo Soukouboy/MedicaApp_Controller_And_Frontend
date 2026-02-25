@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Liste des patients | SmartHealth</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Simple layout matching SmartHealth */
+        .container {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 0 18px;
+        }
+        .topbar {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            margin-bottom:18px;
+        }
+        .title {
+            font-size:1.6rem;
+            color:#07345c;
+            font-weight:700;
+        }
+        .filters {
+            display:flex;
+            gap:10px;
+            align-items:center;
+        }
+        .filter-btn {
+            background:#f4f9f4;
+            border:1px solid #2f8f6f;
+            color:#1f6f54;
+            padding:8px 12px;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:600;
+        }
+        .filter-btn.active {
+            background:linear-gradient(90deg,#1f6f54 60%, #2f8f6f 100%);
+            color:#fff;
+            box-shadow:0 4px 14px rgba(31,111,84,0.12);
+        }
+        .controls {
+            display:flex;
+            gap:8px;
+            align-items:center;
+        }
+        .controls button {padding:8px 12px;border-radius:8px;border:none;background:#2f8f6f;color:#fff;cursor:pointer}
+        .controls button.secondary{background:#1f6f54}
+        .table-card{
+            background:#fff;border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,0.04)
+        }
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:12px 10px;text-align:left;border-bottom:1px solid #eee}
+        th{color:#07345c;font-weight:700}
+        .avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #2f8f6f}
+        .muted{color:#666;font-size:0.95rem}
+        .actions button{margin-right:8px;padding:6px 10px;border-radius:8px;border:none;cursor:pointer}
+        .btn-view{background:#1f6f54;color:#fff}
+        .btn-doc{background:#f39c12;color:#fff}
+        .no-data{padding:28px;text-align:center;color:#666}
+        @media(max-width:760px){
+            th:nth-child(5), td:nth-child(5){display:none}
+        }
+
+        #retour {
+            position: fixed;
+            margin-top: auto;
+            margin-left: 600px;
+            margin-right: 100px;
+            margin-bottom: auto;
+            padding: 10px 16px;
+            background: #6f1f1f;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(31, 111, 84, 0.2);
+            transition: background 0.2s, transform 0.1s;
+            max-width: 800px;
+            z-index: 1000;
+        }
+            #retour {
+                position: fixed;
+                margin-top: auto;
+                margin-left: 600px;
+                margin-right: 100px;
+                margin-bottom: auto;
+                /* increased size: more padding and slightly larger text for better tap targets */
+                padding: 14px 20px;
+                font-size: 1rem;
+                background: #6f1f1f;
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(31, 111, 84, 0.18);
+                transition: background 0.2s, transform 0.1s;
+                max-width: 800px;
+                z-index: 1000;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="title">Patients du médecin</div>
+            <div class="filters" role="tablist" aria-label="Filtrer par dates">
+                <button class="filter-btn" data-range="day">Aujourd'hui</button>
+                <button class="filter-btn" data-range="week">Cette semaine</button>
+                <button class="filter-btn" data-range="month">Ce mois</button>
+                <button class="filter-btn active" data-range="all">Tous</button>
+            </div>
+            <div class="controls">
+                <button id="refreshBtn" title="Rafraîchir"><i class="fa-solid fa-arrows-rotate"></i></button>
+                <button id="showAllBtn" class="secondary" title="Afficher tous les patients">Afficher tous</button>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div id="loading" class="muted">Chargement des patients...</div>
+            <table id="patientsTable" style="display:none">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Patient</th>
+                        <th>Naissance</th>
+                        <th>Téléphone</th>
+                        <th>Dernier RDV</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patientsBody"></tbody>
+            </table>
+            <div id="noData" class="no-data" style="display:none">Aucun patient trouvé.</div>
+        </div>
+    </div>
+
+    <button id="retour">Retour</button>
+
+    <script>
+        // Contract:
+        // - Récupère praticienId depuis localStorage 'praticienId' ou querystring '?praticienId='
+        // - Fetch: GET /api/Praticien/{id}/Patients OR fallback /api/Patient
+        // - Response: array of patients { idPatient, nom, prenom, dateNaissance, phone, lastRdv }
+        // - Filtre: day/week/month/all (utilise lastRdv date)
+
+        function getPraticienId(){
+            const q = new URLSearchParams(window.location.search);
+            return q.get('praticienId') || localStorage.getItem('praticienId');
+        }
+
+        function formatDate(d){ if(!d) return '—'; const dt=new Date(d); return dt.toLocaleDateString('fr-FR'); }
+        function formatDateTime(d){ if(!d) return '—'; const dt=new Date(d); return dt.toLocaleString('fr-FR', {dateStyle:'short',timeStyle:'short'}); }
+
+        let patients = [];
+        const patientsTable = document.getElementById('patientsTable');
+        const patientsBody = document.getElementById('patientsBody');
+        const loading = document.getElementById('loading');
+        const noData = document.getElementById('noData');
+
+        async function fetchPatients(){
+            loading.style.display='block'; patientsTable.style.display='none'; noData.style.display='none';
+            patientsBody.innerHTML='';
+            const praticienId = getPraticienId();
+            try{
+                let url = praticienId ? `http://localhost:5103/api/Praticien/${praticienId}/patients` : 'http://localhost:5103/api/Patient';
+                const res = await fetch(url);
+                if(!res.ok) throw new Error('Erreur API');
+                const data = await res.json();
+                // Normalize data: ensure lastRdv field exists
+                patients = data.map(p=>({
+                    id: p.patientID || p.idPatient || p.id || '',
+                    nom: p.nom || '',
+                    prenom: p.prenom ||  '',
+                    dateNaissance: p.dateNaissance ||  null,
+                    phone: p.authentification.num_telephone || p.num_telephone || p.phone || '',
+                    lastRdv: p.lastRdv || p.dernierRdv || p.lastAppointment || null
+                }));
+                renderPatients('all');
+            }catch(err){
+                console.error(err);
+                loading.textContent='Erreur lors du chargement des patients.';
+                noData.style.display='block';
+                noData.textContent='Impossible de charger les patients.';
+            }
+        }
+
+        function withinRange(dateStr, range){
+            if(!dateStr) return false;
+            const d = new Date(dateStr);
+            const now = new Date();
+            if(range==='day'){
+                return d.toDateString()===now.toDateString();
+            }
+            if(range==='week'){
+                const start = new Date(now);
+                start.setDate(now.getDate() - now.getDay()); // dimanche
+                start.setHours(0,0,0,0);
+                const end = new Date(start);
+                end.setDate(start.getDate()+6); end.setHours(23,59,59,999);
+                return d>=start && d<=end;
+            }
+            if(range==='month'){
+                return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+            }
+            return true;
+        }
+
+        function renderPatients(range){
+            patientsBody.innerHTML='';
+            const filtered = patients.filter(p=> range==='all' ? true : withinRange(p.lastRdv, range));
+            if(filtered.length===0){ loading.style.display='none'; patientsTable.style.display='none'; noData.style.display='block'; noData.textContent='Aucun patient trouvé.'; return; }
+            filtered.forEach((p,i)=>{
+                const tr=document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${i+1}</td>
+                    <td><div style="display:flex;align-items:center;gap:10px;"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(p.prenom+' '+p.nom)}&background=2f8f6f&color=fff&rounded=true&size=64" class="avatar"> <div><strong>${p.prenom} ${p.nom}</strong><div class="muted">ID: ${p.id}</div></div></div></td>
+                    <td>${formatDate(p.dateNaissance)}</td>
+                    <td>${p.phone || '—'}</td>
+                    <td>${p.lastRdv ? formatDateTime(p.lastRdv) : '—'}</td>
+                    <td class="actions">
+                        <button class="btn-view" data-patientid="${p.id}" title="Voir le profil" ><i class="fa-solid fa-eye"></i> Voir</button>
+                    </td>
+                   
+                `;
+                        /* ---------- clic simple ---------- */
+            tr.querySelector('.btn-view').addEventListener('click', () => {
+                // Récupérer l'ID du patient et le stocker dans localStorage
+                const patientId = p.id;
+                localStorage.setItem('patientId', patientId);
+                console.log('Patient ID stocké dans localStorage:', patientId);
+                
+                // Rediriger vers la page profil
+                window.location.href = 'profil.html';
+            });
+
+    patientsBody.appendChild(tr);
+              
+       
+              
+            });
+            loading.style.display='none'; patientsTable.style.display='table'; noData.style.display='none';
+            // attach actions
+            
+ 
+             async function fetchPatientDetails(patientId) { 
+            try {
+                 const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`);
+                     if (!response.ok) throw new Error("Erreur lors du chargement des données du patient");
+                      const patient = await response.json(); console.log("Données du patient chargées:", patient);
+                      localStorage.setItem('password', patient.authentification?.password || ''); // Stocker le mot de passe dans localStorage
+                        
+                       // Remplir les champs du formulaire avec les données du patient 
+                        document.getElementById('nom').value = patient.nom || ''; 
+                        document.getElementById('prenom').value = patient.prenom || ''; 
+                       //  Convertir la date de naissance au format YYYY-MM-DD pour l'input de type date 
+                        const dateNaissance = new Date(patient.dateNaissance); 
+                        const formattedDate = dateNaissance.toISOString().split('T')[0];
+                         document.getElementById('dateNaissance').value = formattedDate || ''; 
+                        document.getElementById('sexe').value = patient.sexe || '';
+                         document.getElementById('pays').value = patient.adresse?.pays || ''; 
+                       // // Remplir le groupe sanguin 
+                        document.getElementById('groupSanguin').value = patient.profilMedical?.groupSanguin || '';
+                       //  // Joindre les allergies, traitements, et antécédents en chaînes séparées par des virgules 
+                        document.getElementById('allergies').value = patient.profilMedical?.allergies?.join(', ') || '';
+                         document.getElementById('antecedents').value = patient.profilMedical?.antecedents?.join(', ') || ''; 
+                        document.getElementById('email').value = patient.authentification?.email || ''; 
+                        document.getElementById('phone').value = patient.authentification?.num_telephone || ''; 
+                        document.getElementById('adresse').value = patient.adresse?.rue || 'Rue inconnue'; 
+                        document.getElementById('codePostal').value = patient.adresse?.codePostal || 'Code postal inconnu';
+                         document.getElementById('ville').value = patient.adresse?.ville || ' Ville inconnue'; 
+
+              
+
+            }
+            catch (err) { 
+                            console.error("Erreur lors du chargement des données du patient:", err);
+            } 
+        }
+           
+        }
+
+        // attach filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click', e=>{
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            const range = e.currentTarget.dataset.range;
+            renderPatients(range);
+        }));
+
+        document.getElementById('refreshBtn').addEventListener('click', fetchPatients);
+        document.getElementById('showAllBtn').addEventListener('click', ()=>{ document.querySelector('.filter-btn[data-range="all"]').click(); });
+
+        // initial load
+        fetchPatients();
+
+// Bouton retour pour revenir à la page précédente
+if(document.getElementById("retour")){
+    document.getElementById("retour").addEventListener("click",()=>{
+        window.history.back();
+    });
+}
+
+    </script>
+</body>
+</html>

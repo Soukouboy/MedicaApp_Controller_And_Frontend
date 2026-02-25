@@ -429,6 +429,7 @@
                         <div class="error-message" id="terms-error">Vous devez accepter les conditions</div>
                     </div>
                 </div>
+                <h3 id="confirmation" style="display: none; color: green;">Votre compte a été créé avec succès !</h3>
 
                 <!-- Navigation du formulaire -->
                 <div class="form-navigation">
@@ -627,6 +628,7 @@
 
             const result = await response.json();
           console.log("Patient ajouté avec succès:", result);
+          document.getElementById('confirmation').style.display = 'block';
             alert("Patient ajouté avec succès!");
          
 

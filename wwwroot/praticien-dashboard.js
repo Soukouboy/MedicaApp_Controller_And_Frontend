@@ -117,6 +117,53 @@ function formatDate(dateISO) {
                 mainContent.innerHTML = profilHTML;
                 console.log("Chargement des rendez-vous...");
 
+                // --- Ajout dynamique : barre de filtres (Jour / Semaine / Mois / Tous)
+                // Insérer en haut de la zone main-content si elle n'existe pas encore
+                if (!document.getElementById('rdvFilterBar')) {
+                    const filterBar = document.createElement('div');
+                    filterBar.id = 'rdvFilterBar';
+                    // aligner les boutons au centre et descendre la barre d'1cm pour un meilleur espacement
+                    filterBar.style.cssText = 'display:flex; gap:12px; align-items:center; padding:14px 0; margin-top:50px; margin-bottom:30px; justify-content:center; width:50%;';
+
+                    const ranges = [
+                        {key: 'day', label: "Aujourd'hui"},
+                        {key: 'week', label: 'Cette semaine'},
+                        {key: 'month', label: 'Ce mois'},
+                        {key: 'all', label: 'Tous'}
+                    ];
+
+                    ranges.forEach(r => {
+                        const btn = document.createElement('button');
+                        btn.className = 'rdv-filter-btn';
+                        btn.dataset.range = r.key;
+                        btn.textContent = r.label;
+                        // style par défaut (vert du site)
+                        btn.style.cssText = 'background: linear-gradient(90deg,#1f6f54 60%, #2f8f6f 100%); color:#fff; border:none; padding:8px 14px; border-radius:10px; cursor:pointer; transition: transform 0.08s, box-shadow 0.12s;';
+                        // hover effect
+                        btn.addEventListener('mouseenter', () => { btn.style.transform = 'translateY(-2px) scale(1.02)'; btn.style.boxShadow = '0 6px 18px rgba(31,111,84,0.12)'; });
+                        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; btn.style.boxShadow = ''; });
+                        // active visual for 'all' by default
+                        if (r.key === 'all') btn.classList.add('active');
+                        filterBar.appendChild(btn);
+                    });
+
+                    // Try to place the filter bar on the same line as the section title 'Mes Rendez-vous'
+                    const sectionHeader = mainContent.querySelector('.patient-overview h2');
+                    if (sectionHeader) {
+                        // Create a wrapper that places the title at left and filters at right on the same line
+                        const wrapper = document.createElement('div');
+                        wrapper.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:16px; width:100%; margin-bottom:6px;';
+
+                        // Move the existing header into the wrapper
+                        sectionHeader.parentNode.insertBefore(wrapper, sectionHeader);
+                        wrapper.appendChild(sectionHeader);
+                        wrapper.appendChild(filterBar);
+                    } else {
+                        // Fallback: insert at top of mainContent
+                        mainContent.insertBefore(filterBar, mainContent.firstChild);
+                    }
+                }
+
                 const medecinId = localStorage.getItem('medecinId');
                 if (!medecinId) {
                     alert("Vous devez vous connecter !");
@@ -128,8 +175,135 @@ function formatDate(dateISO) {
                     const response = await fetch(`http://localhost:5103/api/Praticien/rendezvous/${medecinId}`);
                     if (!response.ok) throw new Error("Erreur lors de la récupération des rendez-vous");
                     const rdvs = await response.json();
+                    // Stocker et afficher
+                    window.praticienRdvs = Array.isArray(rdvs) ? rdvs.slice() : [];
                     afficherRendezVous(rdvs);
                     console.log("Rendez-vous chargés:", rdvs);
+
+                    // Attacher le comportement des boutons de tri (ils ont été ajoutés dynamiquement au-dessus)
+                    const filterBtns = document.querySelectorAll('#rdvFilterBar .rdv-filter-btn');
+                    if (filterBtns && filterBtns.length) {
+                        // utilitaires
+                        function rdvWithinRange(dateStr, range) {
+                            if (!dateStr) return false;
+                            const d = new Date(dateStr);
+                            const now = new Date();
+                            if (range === 'day') return d.toDateString() === now.toDateString();
+                            if (range === 'week') {
+                                const monday = new Date(now);
+                                const day = (now.getDay() + 6) % 7;
+                                monday.setDate(now.getDate() - day);
+                                monday.setHours(0,0,0,0);
+                                const sunday = new Date(monday);
+                                sunday.setDate(monday.getDate() + 6);
+                                sunday.setHours(23,59,59,999);
+                                return d >= monday && d <= sunday;
+                            }
+                            if (range === 'month') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                            return true;
+                        }
+
+                        function applyRdvFilter(range) {
+                            const base = Array.isArray(window.praticienRdvs) ? window.praticienRdvs : [];
+                            const filtered = base.filter(r => range === 'all' ? true : rdvWithinRange(r.dateHeure || r.date || r.dateRDV, range));
+                            try { afficherRendezVous(filtered); } catch (e) { console.error(e); }
+                        }
+
+                        // Attach events and dynamic styling
+                        filterBtns.forEach(btn => {
+                            // click handler
+                            btn.addEventListener('click', (ev) => {
+                                filterBtns.forEach(b => {
+                                    b.classList.remove('active');
+                                    // reset style
+                                    b.style.background = 'linear-gradient(90deg,#1f6f54 60%, #2f8f6f 100%)';
+                                    b.style.boxShadow = '';
+                                });
+                                const cur = ev.currentTarget;
+                                cur.classList.add('active');
+                                // active style
+                                cur.style.background = 'linear-gradient(90deg,#144f3e 60%, #1f7a56 100%)';
+                                cur.style.boxShadow = '0 8px 22px rgba(20,79,62,0.18)';
+                                const range = cur.dataset.range || 'all';
+                                applyRdvFilter(range);
+                            });
+                            // keyboard accessibility: allow Enter key
+                            btn.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') btn.click(); });
+                        });
+                    }
+
+                    // --- Ajout : stockage et filtres pour les rendez-vous (jour / semaine / mois / tous)
+                    try {
+                        // Conserver les rendez-vous chargés pour filtres ultérieurs
+                        // window.praticienRdvs = Array.isArray(rdvs) ? rdvs.slice() : [];
+
+                        // // Crée une barre de filtres simple (si elle n'existe pas déjà)
+                        // if (!document.getElementById('rdvFilters')) {
+                        //     const filters = document.createElement('div');
+                        //     filters.id = 'rdvFilters';
+                        //     filters.style.cssText = 'display:flex; gap:8px; margin:12px 0;';
+                            
+
+                        //     // Inserer au-dessus du tableau de rdv si possible
+                        //     const table = document.getElementById('rdvTable');
+                        //     if (table && table.parentNode) {
+                        //         table.parentNode.insertBefore(filters, table.parentNode.firstChild);
+                        //     } else {
+                        //         // Sinon insérer dans main-content
+                        //         if (mainContent) mainContent.insertBefore(filters, mainContent.firstChild);
+                        //     }
+                        // }
+
+                        // // Fonction utilitaire pour vérifier si une date est dans une plage
+                        // function rdvWithinRange(dateStr, range) {
+                        //     if (!dateStr) return false;
+                        //     const d = new Date(dateStr);
+                        //     const now = new Date();
+                        //     if (range === 'day') {
+                        //         return d.toDateString() === now.toDateString();
+                        //     }
+                        //     if (range === 'week') {
+                        //         // semaine commençant le lundi
+                        //         const monday = new Date(now);
+                        //         const day = (now.getDay() + 6) % 7; // 0=Monday
+                        //         monday.setDate(now.getDate() - day);
+                        //         monday.setHours(0,0,0,0);
+                        //         const sunday = new Date(monday);
+                        //         sunday.setDate(monday.getDate() + 6);
+                        //         sunday.setHours(23,59,59,999);
+                        //         return d >= monday && d <= sunday;
+                        //     }
+                        //     if (range === 'month') {
+                        //         return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                        //     }
+                        //     return true;
+                        // }
+
+                        // // Appliquer un filtre et ré-afficher
+                        // function applyRdvFilter(range) {
+                        //     const base = Array.isArray(window.praticienRdvs) ? window.praticienRdvs : [];
+                        //     const filtered = base.filter(r => range === 'all' ? true : rdvWithinRange(r.dateHeure || r.date || r.dateRDV, range));
+                        //     // Réutilise la fonction existante d'affichage
+                        //     try {
+                        //         afficherRendezVous(filtered);
+                        //     } catch (e) {
+                        //         console.error('Erreur lors du rendu des rdv filtrés', e);
+                        //     }
+                        // }
+
+                        // Attacher les listeners aux boutons de filtres
+                        document.querySelectorAll('.rdv-filter-btn').forEach(btn => {
+                            btn.addEventListener('click', (ev) => {
+                                document.querySelectorAll('.rdv-filter-btn').forEach(b => b.classList.remove('active'));
+                                ev.currentTarget.classList.add('active');
+                                const range = ev.currentTarget.dataset.range || 'all';
+                                applyRdvFilter(range);
+                            });
+                        });
+
+                    } catch (filterErr) {
+                        console.error('Erreur lors de l' + "" + 'initialisation des filtres de rdv', filterErr);
+                    }
                 } catch (error) {
                     console.error("Erreur lors de la récupération des rendez-vous :", error);
                     alert("Impossible de charger les rendez-vous.");
@@ -211,7 +385,7 @@ function formatDate(dateISO) {
                     if(documentBtn){
                     documentBtn.addEventListener('click', async function() {
                         try {
-
+                                localStorage.setItem('rdvId', rdv.idRdv);
                                     const profilHTML = await fetch('page-document.html').then(res => {
                                     if (!res.ok) throw new Error("Erreur de chargement du fichier de création de document");
                                     return res.text();
@@ -234,8 +408,8 @@ function formatDate(dateISO) {
                                 }   
                 
                         
-                    });
-                }
+                        });
+                    }
 
                     if (annulerBtn) {
                         annulerBtn.addEventListener('click', async function() {
@@ -338,3 +512,96 @@ function formatDate(dateISO) {
 });
     
 
+btn_patients= document.getElementById("btn-patient");
+
+if(btn_patients){
+    btn_patients.addEventListener('click',()=>{
+
+        window.location.href='Liste-patient-medecin.html';
+    });
+}
+
+/*
+  Fonction Trie
+  - Définit les utilitaires de filtrage des rendez-vous (jour / semaine / mois / tous)
+  - S'attache aux boutons de filtre si l'élément #rdvFilters est présent
+  - Utilise `window.praticienRdvs` comme source des rendez-vous et réutilise
+    la fonction existante `afficherRendezVous` pour l'affichage filtré.
+  NOTE: la fonction est idempotente et n'ajoute pas de listeners plusieurs fois.
+// */
+// function Trie() {
+//     // utilitaire pour vérifier une date dans une plage
+//     function rdvWithinRange(dateStr, range) {
+//         if (!dateStr) return false;
+//         const d = new Date(dateStr);
+//         const now = new Date();
+//         if (range === 'day') {
+//             return d.toDateString() === now.toDateString();
+//         }
+//         if (range === 'week') {
+//             // semaine commençant le lundi
+//             const monday = new Date(now);
+//             const day = (now.getDay() + 6) % 7; // 0=Monday
+//             monday.setDate(now.getDate() - day);
+//             monday.setHours(0,0,0,0);
+//             const sunday = new Date(monday);
+//             sunday.setDate(monday.getDate() + 6);
+//             sunday.setHours(23,59,59,999);
+//             return d >= monday && d <= sunday;
+//         }
+//         if (range === 'month') {
+//             return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+//         }
+//         return true;
+//     }
+
+//     // applique le filtre et ré-affiche en appelant la fonction existante
+//     function applyRdvFilter(range) {
+//         const base = Array.isArray(window.praticienRdvs) ? window.praticienRdvs : [];
+//         const filtered = base.filter(r => range === 'all' ? true : rdvWithinRange(r.dateHeure || r.date || r.dateRDV, range));
+//         try {
+//             if (typeof afficherRendezVous === 'function') {
+//                 afficherRendezVous(filtered);
+//             } else {
+//                 console.warn('afficherRendezVous non trouvé — impossible d\'afficher les rdv filtrés.');
+//             }
+//         } catch (e) {
+//             console.error('Erreur lors du rendu des rdv filtrés', e);
+//         }
+//     }
+
+//     // attache les listeners aux boutons de filtre si pas déjà attachés
+//     function attachFiltersIfPresent() {
+//         const filters = document.getElementById('rdvFilters');
+//         if (!filters) return false;
+//         if (filters.dataset.rdvListenersAttached === 'true') return true; // déjà attaché
+
+//         const buttons = filters.querySelectorAll('.rdv-filter-btn');
+//         buttons.forEach(btn => {
+//             btn.addEventListener('click', (ev) => {
+//                 buttons.forEach(b => b.classList.remove('active'));
+//                 ev.currentTarget.classList.add('active');
+//                 const range = ev.currentTarget.dataset.range || 'all';
+//                 applyRdvFilter(range);
+//             });
+//         });
+
+//         // marque comme attaché pour éviter doublons
+//         filters.dataset.rdvListenersAttached = 'true';
+//         return true;
+//     }
+
+//     // Première tentative d'attachement immédiat
+//     const attachedNow = attachFiltersIfPresent();
+//     if (!attachedNow) {
+//         // Si l'élément n'existe pas encore (chargement dynamique), observer le DOM
+//         const obs = new MutationObserver((mutations, observer) => {
+//             if (attachFiltersIfPresent()) {
+//                 observer.disconnect();
+//             }
+//         });
+//         obs.observe(document.body, { childList: true, subtree: true });
+//     }
+// }
+
+// // Expose la fonction globalement pour pouvoir l'appeler depuis la console si besoin

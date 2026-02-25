@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Médecins</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--sidebar:#2f4858; --accent:#23a455; --muted:#9aa7ad; --card:#ffffff; --bg:#f3f7f8}
+    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+    body{margin:0;background:var(--bg);color:#24323a}
+    .container{max-width:1200px;margin:28px auto;padding:18px}
+    h1{margin:0 0 12px 0;color:var(--sidebar)}
+    .layout{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(36,50,58,0.06)}
+
+    /* table */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;text-align:left;border-bottom:1px solid #eee}
+    th{color:var(--muted);font-weight:600;font-size:13px;background:#fafbfc}
+    .avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #e9f7ef}
+    .actions button{margin-right:8px;padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+    .actions .edit{background:#2f8f6f;color:#fff}
+    .actions .del{background:#e74c3c;color:#fff}
+
+    /* form */
+    .form-group{display:flex;flex-direction:column;margin-bottom:10px}
+    .form-group label{font-weight:600;color:var(--sidebar);margin-bottom:6px}
+    .form-group input, .form-group select{padding:8px 10px;border-radius:8px;border:1px solid #e6ecec}
+    .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#fff}
+    .muted{color:#777;font-size:13px}
+    /* languages chips */
+    .langs{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .lang-chip input[type="checkbox"]{display:none}
+    .lang-chip label{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #e6ecec;background:#fff;cursor:pointer;font-size:13px;color:#2f4858}
+    .lang-chip input[type="checkbox"]:checked + label{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 6px 18px rgba(35,164,85,0.12)}
+
+    .btn-retour {
+      position:relative;
+      max-width: 100px;
+      bottom: auto;
+      left: 50%;
+      margin-top: auto;
+      margin-right: 100px;
+      padding: 10px 16px;
+      background-color: red;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(35, 164, 85, 0.2);
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    /* responsive */
+    @media(max-width:980px){.layout{grid-template-columns:1fr}.container{padding:12px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gestion des médecins</h1>
+    <div class="layout">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <strong>Liste des médecins</strong>
+          <div><button id="refreshBtn" class="btn">♻️</button></div>
+        </div>
+        <div style="overflow:auto">
+          <table id="doctorsTable">
+            <thead>
+              <tr><th>#</th><th>Medecin</th><th>Spécialité</th><th>Email</th><th>Téléphone</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="doctorsBody"></tbody>
+          </table>
+          <div id="noData" class="muted" style="display:none;padding:12px;text-align:center">Aucun médecin trouvé.</div>
+        </div>
+      </div>
+
+      <aside class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong>Créer un compte médecin</strong>
+          <button id="showCreateBtn" class="btn primary">➕ Nouveau</button>
+        </div>
+        <p class="muted" style="margin-top:6px">Cliquez sur "Nouveau" pour afficher le formulaire de création.</p>
+
+        <div id="createFormWrapper" style="display:none;margin-top:12px">
+          <form id="createDoctorForm">
+            <div class="form-group"><label for="nom">Nom</label><input id="nom" name="nom" required></div>
+            <div class="form-group"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required></div>
+            <div class="form-group"><label for="specialite">Spécialité</label>
+                <select id="specialite" name="specialite">
+                  <option value="">-- Sélectionner --</option>
+                  <option>Généraliste</option>
+                  <option>Cardiologue</option>
+                  <option>Neurologue</option>
+                  <option>Pédiatre</option>
+                  <option>Dermatologue</option>
+                  <option>Gynécologue</option>
+                  <option>Ophtalmologue</option>
+                  <option>Psychiatre</option>
+                </select>
+              </div>
+              <div class="form-group"><label for="lieu">Lieu de consultation</label><input id="lieu" name="lieu" placeholder="Ex: Clinique X, Cabinet Y"></div>
+              <div class="form-group"><label for="langues">Langues parlées</label>
+                <div class="langs" id="langues">
+                  <div class="lang-chip"><input type="checkbox" id="lang_fr" name="langues" value="fr"><label for="lang_fr">Français</label></div>
+                  <div class="lang-chip"><input type="checkbox" id="lang_ar" name="langues" value="ar"><label for="lang_ar">Arabe</label></div>
+                  <div class="lang-chip"><input type="checkbox" id="lang_en" name="langues" value="en"><label for="lang_en">Anglais</label></div>
+                  <div class="lang-chip"><input type="checkbox" id="lang_es" name="langues" value="es"><label for="lang_es">Espagnol</label></div>
+                  <div class="lang-chip"><input type="checkbox" id="lang_de" name="langues" value="de"><label for="lang_de">Allemand</label></div>
+                  <div class="lang-chip"><input type="checkbox" id="lang_pt" name="langues" value="pt"><label for="lang_pt">Portugais</label></div>
+                </div>
+              </div>
+              <div class="form-group"><label for="sexe">Sexe</label>
+                <select id="sexe" name="sexe">
+                  <option value="">-- Sélectionner --</option>
+                  <option value="Homme">Homme</option>
+                  <option value="Femme">Femme</option>
+                  <option value="Autre">Autre</option>
+                </select>
+              </div>
+            <div class="form-group"><label for="email">Email</label><input id="email" name="email" type="email" required></div>
+            <div class="form-group"><label for="telephone">Téléphone</label><input id="telephone" name="telephone"></div>
+            <div class="form-group"><label for="password">Mot de passe</label><input id="password" name="password" type="password" required></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button type="submit" class="btn primary">Créer</button>
+              <button type="button" id="resetBtn" class="btn">Réinitialiser</button>
+              <button type="button" id="cancelCreateBtn" class="btn">Annuler</button>
+            </div>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+<!-- Un bouton de Retour pour retourner vers le tableau des médecins -->
+ <button class="btn-retour" id="retour">Retour</button>
+  <script>
+    const apiBase = 'http://localhost:5103';
+    const doctorsBody = document.getElementById('doctorsBody');
+    const noData = document.getElementById('noData');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const form = document.getElementById('createDoctorForm');
+    const resetBtn = document.getElementById('resetBtn');
+    const showCreateBtn = document.getElementById('showCreateBtn');
+    const createFormWrapper = document.getElementById('createFormWrapper');
+    const cancelCreateBtn = document.getElementById('cancelCreateBtn');
+
+    let doctors = [];
+
+    function renderDoctors(list){
+      doctorsBody.innerHTML = '';
+      if(!list || list.length===0){ document.getElementById('doctorsTable').style.display='none'; noData.style.display='block'; return; }
+      document.getElementById('doctorsTable').style.display='table'; noData.style.display='none';
+      list.forEach((d,i)=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${i+1}</td>
+          <td><div style="display:flex;align-items:center;gap:8px"><img class="avatar" src="https://ui-avatars.com/api/?name=${encodeURIComponent((d.prenom||'')+' '+(d.nom||''))}&background=2f8f6f&color=fff&rounded=true&size=64"> <div><strong>${(d.prenom||'')+' '+(d.nom||'')}</strong><div class="muted">ID: ${d.idPraticien || d.id || '—'}</div></div></div></td>
+          <td>${d.specialite || '—'}</td>
+          <td>${d.email || d.auth?.email || '—'}</td>
+          <td>${d.telephone || d.phone || '—'}</td>
+          <td class="actions"><button class="edit" data-id="${d.idPraticien||d.id}">✏️</button><button class="del" data-id="${d.idPraticien||d.id}">🗑️</button></td>
+        `;
+        doctorsBody.appendChild(tr);
+      });
+ 
+      // attach handlers
+      document.querySelectorAll('.actions .del').forEach(b=>b.addEventListener('click', async e=>{
+        const id = e.currentTarget.dataset.id;
+        if(!confirm('Supprimer ce médecin ?')) return;
+        try{
+          const res = await fetch(`${apiBase}/api/Praticien/${id}`,{method:'DELETE'});
+          if(!res.ok) throw new Error('Erreur API');
+          alert('Médecin supprimé');
+          fetchDoctors();
+        }catch(err){alert('Impossible de supprimer: '+err.message)}
+      }));
+
+      document.querySelectorAll('.actions .edit').forEach(b=>b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id; window.location.href = "#";
+      }));
+    }
+
+    async function fetchDoctors(){
+      doctorsBody.innerHTML=''; noData.style.display='none';
+      try{
+        const res = await fetch(`${apiBase}/api/Praticien`);
+        if(!res.ok) throw new Error('API error');
+        const data = await res.json();
+        doctors = (data||[]).map(d=>({
+          idPraticien: d.idPraticien || d.id,
+          nom: d.nom || '',
+          prenom: d.prenom || '',
+          specialite: d.specialite || d.speciality || '',
+          email: d.authentification?.email || d.email || '',
+          telephone: d.telephone || d.phone || ''
+        }));
+        renderDoctors(doctors);
+      }catch(err){
+        console.warn('Erreur fetch praticiens',err);
+        doctors = [
+          {idPraticien:'D1001',prenom:'Soukouna',nom:'D',specialite:'Neurologue',email:'doc1@smarthealth.com',telephone:'+212600000'},
+          {idPraticien:'D1002',prenom:'Amina',nom:'R',specialite:'Cardiologue',email:'amina.r@smarthealth.com',telephone:'+212600001'}
+        ];
+        renderDoctors(doctors);
+      }
+    }
+
+
+// Button Retour
+    const retourBtn = document.getElementById('retour');
+    if(retourBtn){
+      retourBtn.addEventListener('click', ()=>{
+        window.location.href = 'admin_dashboard.html'; // Adjust the URL as needed
+      });
+    }
+
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+        const getSelectedLanguages = () => {
+          const checked = document.querySelectorAll('#langues input[name="langues"]:checked');
+          return Array.from(checked).map(i => i.value);
+        };
+
+        // Build payload matching backend contract:
+        // {
+        //   nom, prenom, specialite, lieuConsultation, email, password, phone, languesParlees, sexe
+        // }
+        const payload = {
+        nom: document.getElementById('nom').value.trim(),
+        prenom: document.getElementById('prenom').value.trim(),
+        specialite: document.getElementById('specialite').value || '',
+        lieuConsultation: document.getElementById('lieu').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        phone: document.getElementById('telephone').value.trim(),
+        languesParlees: getSelectedLanguages(),
+        sexe: document.getElementById('sexe').value || ''
+      };
+      try{
+        const res = await fetch(`${apiBase}/api/Praticien`,{
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error('Erreur API');
+        alert('Médecin créé avec succès');
+        form.reset(); fetchDoctors();
+      }catch(err){alert('Impossible de créer le médecin: '+err.message)}
+    });
+
+    resetBtn.addEventListener('click', ()=>{
+      form.reset();
+      // clear language chips (checkboxes)
+      document.querySelectorAll('#langues input[type="checkbox"]').forEach(i=>i.checked=false);
+    });
+    refreshBtn.addEventListener('click', fetchDoctors);
+
+    // Show / hide create form
+    if (showCreateBtn && createFormWrapper) {
+      showCreateBtn.addEventListener('click', () => {
+        createFormWrapper.style.display = createFormWrapper.style.display === 'none' ? 'block' : 'none';
+        if (createFormWrapper.style.display === 'block') {
+          document.getElementById('nom').focus();
+        }
+      });
+    }
+    if (cancelCreateBtn && createFormWrapper) {
+      cancelCreateBtn.addEventListener('click', () => {
+        form.reset(); createFormWrapper.style.display = 'none';
+      });
+    }
+
+    // init
+    fetchDoctors();
+  </script>
+</body>
+</html>

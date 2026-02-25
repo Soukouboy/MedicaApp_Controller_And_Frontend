@@ -26,11 +26,24 @@
           
         }
          .logout {
-            margin-bottom: 650px;
-           
-            left: 0;
-            bottom: 650px;
+        margin-top: 95%; /* Pushes the logout button to the bottom */
+         padding: 15px 25px;
         }
+        
+        .logout button {
+            color: white;
+            background-color: #e74c3c; /* Red color */
+            border: none;
+            padding: 10px 15px ;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .logout button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+        }
+
 
         body {
             background-color: #f5f7fa;
@@ -50,21 +63,30 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            position: fixed; /* This makes the sidebar fixed */
+            left: 0;
+            top: 0;
+            transition: width 0.3s ease; /* Smooth transition for width */
         }
+        .sidebar.collapsed {
+            width: 70px; /* Width when collapsed */
+        }
+
+
 
         .logo {
             display: flex;
             align-items: center;
-            padding: 0 20px 20px;
+            padding: 0 4px 8px;
             font-size: 1.5rem;
             font-weight: bold;
         }
 
-            .logo i {
+        .logo i {
                 margin-right: 10px;
                 font-size: 1.8rem;
                 color: var(--primary);
-            }
+    }
 
         .sidebar nav ul {
             list-style: none;
@@ -86,6 +108,26 @@
                 border-left: 4px solid var(--primary);
             }
 
+        .sidebar-toggle {
+            position: absolute;
+            left: 210px;
+            top: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1010;
+        }
+        .sidebar.collapsed + .sidebar-toggle {
+             left: 60px;
+        }
+        .sidebar.collapsed + .main-content {
+        margin-left: 70px; /* New margin when sidebar is collapsed */
+        width: calc(100% - 70px);
+        transition: width 0.3s ease; /* Smooth transition for width */
+    }
+
             .sidebar nav li i {
                 margin-right: 10px;
                 width: 20px;
@@ -96,6 +138,9 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            width: calc(100% - 250px);
+            margin-left: 250px; /* Initial margin to push content away from sidebar */
+            transition: margin-left 0.3s ease; /* Smooth transition for margin-left */
         }
 
         .top-bar {

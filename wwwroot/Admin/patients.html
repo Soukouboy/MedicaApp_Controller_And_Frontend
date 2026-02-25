@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Liste des patients</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--sidebar:#2f4858; --accent:#23a455; --muted:#9aa7ad; --card:#ffffff; --bg:#f3f7f8}
+    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+    body{margin:0;background:var(--bg);color:#24323a}
+    .container{max-width:1100px;margin:28px auto;padding:18px}
+    h1{margin:0 0 12px 0;color:var(--sidebar)}
+    .card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 18px rgba(36,50,58,0.06)}
+    .controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .controls .left{display:flex;gap:8px}
+    .search input{padding:8px 12px;border-radius:8px;border:1px solid #e6ecec}
+    .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#fff}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;text-align:left;border-bottom:1px solid #eee}
+    th{color:var(--muted);font-weight:600;font-size:13px}
+    .avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e9f7ef}
+    .actions button{margin-right:8px;padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+    .actions .view{background:#1f6f54;color:#fff}
+    .actions .edit{background:#2f8f6f;color:#fff}
+    .no-data{padding:28px;text-align:center;color:#666}
+    @media(max-width:760px){table{font-size:13px} .avatar{width:30px;height:30px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Liste des patients</h1>
+
+    <div class="card">
+      <div class="controls">
+        <div class="left">
+          <div class="search">
+            <input id="searchInput" placeholder="Rechercher par nom, email ou téléphone...">
+          </div>
+          <button id="refreshBtn" class="btn">♻️</button>
+        </div>
+        <div>
+          <button id="createBtn" class="btn primary">➕ Nouveau patient</button>
+        </div>
+      </div>
+
+      <div id="tableWrapper">
+        <table id="patientsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Patient</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Naissance</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="patientsBody">
+            <!-- rows injected here -->
+          </tbody>
+        </table>
+        <div id="noData" class="no-data" style="display:none">Aucun patient trouvé.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const apiBase = 'http://localhost:5103'; // ajuster si nécessaire
+  const patientsBody = document.getElementById('patientsBody');
+  const noData = document.getElementById('noData');
+  const searchInput = document.getElementById('searchInput');
+  const refreshBtn = document.getElementById('refreshBtn');
+
+  let patients = [];
+
+  function formatDate(d){ if(!d) return '—'; const dt=new Date(d); return dt.toLocaleDateString('fr-FR'); }
+
+  function renderPatients(list){
+    patientsBody.innerHTML = '';
+    if(!list || list.length === 0){ document.getElementById('patientsTable').style.display='none'; noData.style.display='block'; return; }
+    document.getElementById('patientsTable').style.display='table'; noData.style.display='none';
+
+    list.forEach((p, i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i+1}</td>
+        <td><div style="display:flex;align-items:center;gap:10px"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent((p.prenom||'')+' '+(p.nom||''))}&background=2f8f6f&color=fff&rounded=true&size=64" class="avatar"> <div><strong>${(p.prenom||'')+' '+(p.nom||'')}</strong><div style="color:#999;font-size:12px">ID: ${p.idPatient || p.id || '—'}</div></div></div></td>
+        <td>${p.email || p.authentification?.email || '—'}</td>
+        <td>${p.telephone || p.phone || p.authentification?.num_telephone || '—'}</td>
+        <td>${formatDate(p.dateNaissance)}</td>
+        <td class="actions"><button class="view" data-id="${p.idPatient || p.id}">Voir</button><button class="edit" data-id="${p.idPatient || p.id}">Éditer</button></td>
+      `;
+      patientsBody.appendChild(tr);
+    });
+
+    // attach handlers
+    document.querySelectorAll('.actions .view').forEach(b=>b.addEventListener('click', e=>{
+      const id = e.currentTarget.dataset.id; window.location.href = `profil.html?patientId=${id}`;
+    }));
+    document.querySelectorAll('.actions .edit').forEach(b=>b.addEventListener('click', e=>{
+      const id = e.currentTarget.dataset.id; window.location.href = `Admin/edit_patient.html?patientId=${id}`;
+    }));
+  }
+
+  async function fetchPatients(){
+    patientsBody.innerHTML = '';
+    noData.style.display='none';
+    try{
+      const res = await fetch(`${apiBase}/api/Patient`);
+      if(!res.ok) throw new Error('API error');
+      const data = await res.json();
+      patients = data.map(p=>({
+        idPatient: p.idPatient || p.id,
+        nom: p.nom || p.lastName || '',
+        prenom: p.prenom || p.firstName || '',
+        email: p.authentification?.email || p.email || '',
+        telephone: p.authentification?.num_telephone || p.telephone || p.phone || '',
+        dateNaissance: p.dateNaissance || p.birthDate || null
+      }));
+      renderPatients(patients);
+    }catch(err){
+      console.warn('Erreur fetching patients, falling back to sample data', err);
+      // fallback sample
+      patients = [
+        {idPatient:'P1001',prenom:'Abdou',nom:'Kone',email:'abdou@example.com',telephone:'+212600000001',dateNaissance:'1990-05-14'},
+        {idPatient:'P1002',prenom:'Lina',nom:'Mansouri',email:'lina@example.com',telephone:'+212600000002',dateNaissance:'1988-11-02'}
+      ];
+      renderPatients(patients);
+    }
+  }
+
+  // search
+  searchInput.addEventListener('input', ()=>{
+    const q = searchInput.value.trim().toLowerCase();
+    if(!q) return renderPatients(patients);
+    const filtered = patients.filter(p=>((p.nom||'')+' '+(p.prenom||'')+' '+(p.email||'')+' '+(p.telephone||'')).toLowerCase().includes(q));
+    renderPatients(filtered);
+  });
+
+  refreshBtn.addEventListener('click', fetchPatients);
+  document.getElementById('createBtn').addEventListener('click', ()=>{ window.location.href='Admin/create_patient.html'; });
+
+  // initial load
+  fetchPatients();
+</script>
+</body>
+</html>

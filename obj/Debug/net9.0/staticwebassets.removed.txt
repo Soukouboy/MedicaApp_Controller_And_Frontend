@@ -1,0 +1,3 @@
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\ordonnance.jpeg
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\ordonnance-medicale.webp
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\prise-rdv.png

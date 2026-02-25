@@ -149,10 +149,10 @@ C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\ob
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\staticwebassets.build.json.cache
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\staticwebassets.development.json
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\staticwebassets.build.endpoints.json
-C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\MedicalA.E10BAE36.Up2Date
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\MedicalApp.API1.dll
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\refint\MedicalApp.API1.dll
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\MedicalApp.API1.pdb
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\MedicalApp.API1.genruntimeconfig.cache
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\ref\MedicalApp.API1.dll
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\obj\Release\net9.0\MedicalApp.API1.sourcelink.json

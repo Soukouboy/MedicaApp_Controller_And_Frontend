@@ -288,8 +288,9 @@ body {
 .sidebar .logo {
     font-size: 1.5em; /* Taille du texte du logo */
     font-weight: bold; /* Texte en gras */
-    margin-right: 40px; /* Espace à droite du logo */
+    margin-right: 0px; /* Espace à droite du logo */
     margin-bottom: 0; /* Pas d'espace en bas */
+    margin-left: 0; /* Pas d'espace à gauche */
 }
 
 /* Conteneur des liens de navigation */
@@ -297,6 +298,8 @@ body {
     display: flex; /* Affichage horizontal des liens */
     flex-direction: row;
     gap: 10px; /* Espace entre chaque lien */
+    padding: 10px 0; /* Espace en haut et en bas */
+    
 }
 
 /* Style des liens du menu */

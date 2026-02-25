@@ -69,6 +69,26 @@
             font-size: 1.1em;
             text-align: center;
         }
+
+         #retour {
+                position: fixed;
+                margin-top: auto;
+                margin-left: 600px;
+                margin-right: 100px;
+                margin-bottom: auto;
+                /* increased size: more padding and slightly larger text for better tap targets */
+                padding: 14px 20px;
+                font-size: 1rem;
+                background: #6f1f1f;
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(31, 111, 84, 0.18);
+                transition: background 0.2s, transform 0.1s;
+                max-width: 800px;
+                z-index: 1000;
+            }
     </style>
 </head>
 <body>
@@ -80,6 +100,8 @@
             <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer le compte rendu</button>
         </form>
         <div id="compteRenduSuccess" class="success-msg" style="display:none;"></div>
+
+         <button id="retour">Retour</button>
     </div>
     <script>
         document.getElementById('compteRenduForm').onsubmit = function(e) {
@@ -90,6 +112,15 @@
             document.getElementById('compteRenduSuccess').innerHTML = `<i class='fa-solid fa-circle-check'></i> Compte rendu enregistré !`;
             this.reset();
         };
+
+        // Bouton retour pour revenir à la page précédente
+        // Bouton retour pour revenir à la page précédente
+        if(document.getElementById("retour")){
+            document.getElementById("retour").addEventListener("click",()=>{
+                window.history.back();
+            });
+        }
+
     </script>
 </body>
 </html>

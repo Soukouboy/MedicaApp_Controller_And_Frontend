@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MedicalApp.API1.DTO;
 using System.Collections.Generic;
-using MedicalApp;
 using MedicalApp.PdfGenerator;
 using System.Threading.Tasks;
+using MedicalApp.Services;
+using MedicalApp.Metier;
 namespace MedicalApp.API1.Controllers
 
 {
@@ -127,12 +128,12 @@ namespace MedicalApp.API1.Controllers
                 return NotFound($"Ordonnance avec ID {id} introuvable.");
             return Ok((Ordonnance)doc);
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ordonnance>>> GetAllOrdonnances()
+        [HttpGet("{id}/Patient")]
+        public async Task<ActionResult<IEnumerable<Ordonnance>>> GetAllOrdonnancesOfPatients(int id)
         {
             try
             {
-                var documents = await _documentService.GetAllDocumentsAsync();
+                var documents = await _documentService.GetDocumentsByPatientAsync(id);
                 var ordonnances = documents.OfType<Ordonnance>(); // Filtrer uniquement les ordonnances
                 return Ok(ordonnances);
             }

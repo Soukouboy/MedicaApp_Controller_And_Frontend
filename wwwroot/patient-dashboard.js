@@ -43,9 +43,9 @@ function afficherPatient(patient) {
     const AllergieElem = document.getElementById("Allergies");
     const TraitementElem = document.getElementById("Traitements");
     const antecedentsElem = document.getElementById("antecedants");
-
-    if (nomElem) nomElem.textContent = patient.nom || "Nom inconnu";
-    if (prenomElem) prenomElem.textContent = patient.prenom || "Prénom inconnu";
+    const profilPictureElem = document.getElementById("patient_avatar");
+    if (nomElem) nomElem.textContent = patient.nom|| "Nom inconnu";
+    if (prenomElem) prenomElem.textContent = patient.prenom+" "+patient.nom  || "Prénom inconnu";
     if (nomChat) nomChat.textContent = patient.prenom+" "+ patient.nom || "Patient";
     if( dateNaissanceElem && patient.dateNaissance) {
         dateNaissanceElem.textContent = formatDate(patient.dateNaissance);
@@ -65,6 +65,9 @@ function afficherPatient(patient) {
     }
     if (antecedentsElem && patient.profilMedical) {
         antecedentsElem.textContent = patient.profilMedical.antecedents ? patient.profilMedical.antecedents.join(', ') : "Aucun antécédent";
+    }
+    if (profilPictureElem && patient.profilMedical.profilePath) {
+        profilPictureElem.src = patient.profilMedical?.profilePath;
     }
 }
 
@@ -199,68 +202,15 @@ function formatDate(dateISO) {
             window.location.href = 'login.html';
         });
     }
-
-
-
+ 
 
 // Gestion de la soumission du formulaire de profil
 const btnProfil = document.getElementById('btnProfil');
 if (btnProfil) {
 btnProfil.addEventListener('click', async () => { // Charger le contenu HTML de profil 
-    try { 
-        const profilHTML = await fetch('profil.html').then(res => {
-         if (!res.ok) throw new Error("Erreur de chargement du fichier profil.html");
-          return res.text(); 
-        }); 
-          document.getElementById('main-content').innerHTML = profilHTML; 
-          console.log("Chargement du profil médical...");
-            
-         } 
-         catch (err) {
-             console.error("Erreur lors du chargement du fichier profil.html:", err);
-             document.getElementById('main-content').innerHTML = '<p>Erreur lors du chargement du profil.</p>'; return;
-             
-        }
 
- 
-        async function loadPatientData(patientId) { 
-            try {
-                 const response = await fetch(`http://localhost:5103/api/Patient/${patientId}`);
-                     if (!response.ok) throw new Error("Erreur lors du chargement des données du patient");
-                      const patient = await response.json(); console.log("Données du patient chargées:", patient);
-                      localStorage.setItem('password', patient.authentification?.password || ''); // Stocker le mot de passe dans localStorage
-                        
-                       // Remplir les champs du formulaire avec les données du patient 
-                        document.getElementById('nom').value = patient.nom || ''; 
-                        document.getElementById('prenom').value = patient.prenom || ''; 
-                       //  Convertir la date de naissance au format YYYY-MM-DD pour l'input de type date 
-                        const dateNaissance = new Date(patient.dateNaissance); 
-                        const formattedDate = dateNaissance.toISOString().split('T')[0];
-                         document.getElementById('dateNaissance').value = formattedDate || ''; 
-                        document.getElementById('sexe').value = patient.sexe || '';
-                         document.getElementById('pays').value = patient.adresse?.pays || ''; 
-                       // // Remplir le groupe sanguin 
-                        document.getElementById('groupSanguin').value = patient.profilMedical?.groupSanguin || '';
-                       //  // Joindre les allergies, traitements, et antécédents en chaînes séparées par des virgules 
-                        document.getElementById('allergies').value = patient.profilMedical?.allergies?.join(', ') || '';
-                         document.getElementById('antecedents').value = patient.profilMedical?.antecedents?.join(', ') || ''; 
-                        document.getElementById('email').value = patient.authentification?.email || ''; 
-                        document.getElementById('phone').value = patient.authentification?.num_telephone || ''; 
-                        document.getElementById('adresse').value = patient.adresse?.rue || 'Rue inconnue'; 
-                        document.getElementById('codePostal').value = patient.adresse?.codePostal || 'Code postal inconnu';
-                         document.getElementById('ville').value = patient.adresse?.ville || ' Ville inconnue'; 
+    window.location.href = 'profil.html';
 
-              
-
-            }
-            catch (err) { 
-                            console.error("Erreur lors du chargement des données du patient:", err);
-            } 
-        } // Charger les données du patient lorsque la page se charge 
-
-        const patientId = localStorage.getItem('patientId'); // Assurez-vous que l'ID du patient est stocké dans localStorage
-       
-         loadPatientData(patientId); // Charger les données du patient
         });
 
         
@@ -465,78 +415,209 @@ function afficherRendezVous(rdvs) {
         }   
          );}
 
+// Configuration API
+    const API_CONFIG = {
+        url: "http://localhost:8000",
+        endpoint: "/diagnose",
+        timeout: 15000
+    };
+
+// Sélecteurs (utilise vos IDs exacts)
 const sendBtn = document.getElementById('send-btn');
-const chatMessages = document.getElementById('chat-messages'); // conteneur <div> qui affiche la discussion
-const userInput = document.getElementById('user-input'); // champ de saisie utilisateur
+const chatMessages = document.getElementById('chat-messages');
+const userInput = document.getElementById('user-input');
+const nomChatElement = document.getElementById('nom-chat');
+
+// État du typing indicator
+let isTyping = false;
+
+// Initialiser le message avec le nom du patient
+function initializeChat() {
+    const patientName = nomChatElement?.textContent || "Patient";
+    // Le message initial est déjà dans votre HTML, on le personnalise juste si besoin
+}
 
 if (sendBtn) {
     sendBtn.addEventListener('click', async () => {
+        const chatInput = userInput.value.trim();
+        
+        if (!chatInput) {
+            alert("Veuillez décrire vos symptômes.");
+            return;
+        }
+        if (chatInput.length < 5) {
+            alert("Veuillez décrire vos symptômes plus en détail (minimum 5 caractères).");
+            return;
+        }
+
+        // Afficher message utilisateur
+        addMessage("Vous", chatInput, "user-message");
+        userInput.value = "";
+        
+        // Afficher "typing" indicator
+        showTypingIndicator();
+        
         try {
-            const chatInput = userInput.value;
-            if (!chatInput) {
-                alert("Veuillez préciser vos symptômes.");
-                return;
-            }
-            
-            // ✅ Afficher le message utilisateur immédiatement
-            addMessage("Vous", chatInput, "user-message");
-            console.log("Message utilisateur :", chatInput);
-            userInput.value = ""; // Effacer le champ de saisie
+            const response = await fetch(`${API_CONFIG.url}${API_CONFIG.endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    symptoms: chatInput,
+                    num_recommendations: 5
+                }),
+            });
 
-            
-            API_URL="https://d6a8efbab122.ngrok-free.app" // URL de votre backend FastAPI
-            // 🔄 Envoyer au backend (FastAPI)
-            try {
-                  // Appel à l'API
-                const response = await fetch(`${API_URL}/analyze`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ symptoms:chatInput }),
-                });
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`);
-                }
-                
-              
-                
-                const data = await response.json();
-                const botReply = data.reply || "Désolé, je n’ai pas compris.";
-
-                // ✅ Afficher la réponse du bot dans l’UI
-                addMessage("Assistant IA", botReply, "ai-message");
-
-            } catch (error) {
-                console.error("Erreur API :", error);
-                addMessage("Assistant IA", "⚠️ Impossible de contacter le chatbot.", "ai-message");
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(`Erreur ${response.status}: ${errorData.detail || response.statusText}`);
             }
 
-        } catch (err) {
-            console.error("Erreur JS:", err);
-            document.getElementById('main-content').innerHTML = '<p>Erreur lors du chargement du chat.</p>';
+            const data = await response.json();
+            
+            // Cacher typing indicator
+            hideTypingIndicator();
+            
+            // Formater et afficher la réponse
+            if (data.success && data.recommendations && data.recommendations.length > 0) {
+                const patientName = nomChatElement?.textContent || "Patient";
+                const botReply = formatMedicalResponse(data, patientName);
+                addMessage("Dr. Assistant", botReply, "ai-message");
+            } else {
+                addMessage("Dr. Assistant", "Je n'ai pas pu identifier de spécialité adaptée. Essayez de décrire vos symptômes différemment.", "ai-message");
+            }
+
+        } catch (error) {
+            console.error("❌ Erreur API:", error);
+            hideTypingIndicator();
+            const errorMsg = `
+                <div class="error-message">
+                    <strong>⚠️ Erreur de connexion</strong><br>
+                    ${error.message}<br><br>
+                    <small>Vérifiez que l'API tourne sur ${API_CONFIG.url}</small>
+                </div>
+            `;
+            addMessage("Système", errorMsg, "ai-message");
+        }
+    });
+
+    // Envoi avec Enter (sans Shift)
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendBtn.click();
         }
     });
 }
 
-// 🔹 Fonction pour ajouter un message dans le chat
-function addMessage(sender, text, cssClass) {
-    const messageDiv = document.createElement("div");
-    messageDiv.className = `message ${cssClass}`;
-    messageDiv.innerHTML = `
-        <div class="message-header">
-            <i class="${sender === "Vous" ? "fas fa-user-md" : "fas fa-robot"}"></i>
-            <span>${sender}</span>
+/**
+ * Formate la réponse médicale de manière conversationnelle
+ */
+function formatMedicalResponse(data, patientName) {
+    let response = `
+        <div style="margin-bottom: 15px;">
+            <strong>🩺 ${patientName}, voici mon analyse de vos symptômes :</strong><br>
+            <em style="color: #666; font-size: 0.9rem;">"${data.symptoms_analyzed}"</em>
         </div>
-        <p>${text}</p>
+        
+        <div style="margin-bottom: 15px;">
+            D'après ce que vous me décrivez, je vous recommande de consulter :
+        </div>
     `;
-    chatMessages.appendChild(messageDiv);
 
-    // Scroll automatique vers le bas
+    // Cartes des spécialités
+    data.recommendations.forEach(rec => {
+        const priorityEmoji = rec.priority === 'haute' ? '🔴' : rec.priority === 'moyenne' ? '🟡' : '🟢';
+        
+        response += `
+            <div class="specialty-card priority-${rec.priority}">
+                <div class="confidence-badge">${rec.confidence}</div>
+                <strong>${priorityEmoji} ${rec.rank}. ${rec.specialty}</strong>
+                <div style="margin-top: 8px; font-size: 0.9rem; color: #555;">
+                    <strong>Priorité :</strong> ${rec.priority.charAt(0).toUpperCase() + rec.priority.slice(1)}<br>
+                    <strong>Symptômes détectés :</strong> 
+                    ${rec.matching_symptoms.length > 0 
+                        ? rec.matching_symptoms.map(s => `<span class="symptoms-highlight">${s}</span>`).join(', ')
+                        : '<em>Aucun symptôme spécifique détecté</em>'
+                    }<br>
+                    <strong>Description :</strong> ${rec.description}
+                </div>
+            </div>
+        `;
+    });
+
+    // Disclaimer médical
+    response += `
+        <div class="disclaimer">
+            <strong>⚠️ Avertissement important :</strong><br>
+            ${data.disclaimer}
+        </div>
+    `;
+
+    return response;
+}
+
+/**
+ * Affiche l'indicator "est en train d'écrire"
+ */
+function showTypingIndicator() {
+    if (isTyping) return; // Éviter les doublons
+    
+    isTyping = true;
+    const typingDiv = document.createElement("div");
+    typingDiv.className = "message ai-message";
+    typingDiv.id = "typing-indicator";
+    typingDiv.innerHTML = `
+        <div class="message-header">
+            <i class="fas fa-robot"></i>
+            <span><strong>Dr. Assistant</strong></span>
+        </div>
+        <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
+    chatMessages.appendChild(typingDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+/**
+ * Cache l'indicator "est en train d'écrire"
+ */
+function hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+    isTyping = false;
+}
 
+/**
+ * Ajoute un message dans le chat (respecte votre structure HTML)
+ */
+function addMessage(sender, text, cssClass) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${cssClass}`;
+    
+    // Structure exacte de votre HTML
+    messageDiv.innerHTML = `
+        <div class="message-header">
+            <i class="fas ${sender === 'Vous' ? 'fa-user-circle' : 'fa-robot'}"></i>
+            <span><strong>${sender}</strong></span>
+        </div>
+        <div class="message-content">${text}</div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Initialiser le chat au chargement
+initializeChat();
+// Gestion du bouton document Pour le telechargement des ordonnances et comptes rendus
+const idPatient = localStorage.getItem('patientId');   // à récupérer dans le JWT, l'URL, etc.
 
 const btn_document=document.getElementById('document');
 
@@ -549,6 +630,77 @@ if(btn_document){
             });
             document.getElementById('main-content').innerHTML = documentHTML;
             console.log("Chargement des documents ...");
+            await new Promise(resolve => setTimeout(resolve, 100)); // Attendre que le DOM soit mis à jour
+            await loadOrdonnances();  // Appeler la fonction pour charger les ordonnances
+  // Code pour document.html
+ 
+
+            /* 1. Chargement de la liste des ordonnances */
+      async function loadOrdonnances() {
+        try {
+          const res = await fetch(`http://localhost:5103/api/Ordonnance/${idPatient}/Patient`);
+          if (!res.ok) throw new Error("Erreur réseau");
+          const liste = await res.json();
+          console.log(liste);
+
+          const grid = document.getElementById('ordoGrid');
+          grid.innerHTML = '';          // vide l'ancien contenu
+
+            /* 2. Génération + téléchargement du PDF */
+      async function genererPDF(idDoc) {
+        try {
+          const res = await fetch(`http://localhost:5103/api/Ordonnance/${idDoc}/download`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/pdf' }
+          });
+          if (!res.ok) throw new Error("Génération impossible");
+
+          const blob = await res.blob();                 // bytes du PDF
+          const url  = window.URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href     = url;
+          a.download = `Ordonnance_${idDoc}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        } catch (e) {
+          alert("Erreur lors de la création du PDF.");
+        }
+      }
+
+
+
+          liste.forEach(ordo => {
+            const card = document.createElement('div');
+            console.log(ordo);
+            card.className = 'document-card';
+            card.innerHTML = `
+              <i class="fas fa-file-prescription" style="color:#2f8f6f;"></i>
+              <span>Ordonnance du ${new Date(ordo.dateCreation).toLocaleDateString()}</span>
+              <button  id="btn-download-${ordo.idDocument}">
+                <i class="fa fa-download" ></i> Générer le PDF
+              </button>
+            `;
+            grid.appendChild(card);
+
+            // Ajouter l'événement de clic pour le bouton de téléchargement
+            const downloadBtn = document.getElementById(`btn-download-${ordo.idDocument}`);
+            downloadBtn.addEventListener('click', () => genererPDF(ordo.idDocument));
+
+          });
+        } catch (e) {
+          console.error(e);
+          alert("Impossible de charger les ordonnances.");
+        }
+      }
+
+      
+
+      /* 3. Au chargement de la page */
+      document.addEventListener('DOMContentLoaded', loadOrdonnances);
+
+
         }
         catch (err) {
             console.error("Erreur lors du chargement du fichier document.html:", err);
@@ -557,28 +709,6 @@ if(btn_document){
     });
 }
 
-const ordonnance= document.getElementById('ordonnance_pdf');
-const doc_ordonnance= document.getElementById('ordonnance_pdf_doc');
-if(ordonnance || doc_ordonnance){
-    ordonnance.addEventListener('click',async()=>{  
-        try{
-            const response=await fetch('http://localhost:5103/api/Ordonnance/4/download');
-            if(!response.ok) throw new Error("Erreur lors du téléchargement de l'ordonnance");
-            const blob=await response.blob();
-            const url=window.URL.createObjectURL(blob);
-            const a=document.createElement('a');
-            a.href=url;
-            a.download='ordonnance.pdf';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-        }catch(err){
-            console.error("Erreur lors du téléchargement de l'ordonnance:",err);
-            alert("Impossible de télécharger l'ordonnance.");
-        }
-    });
-}
 
 
 

@@ -2,27 +2,43 @@ C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\ww
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dashboard-patient.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\help.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\contact.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\admin_medecins.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\praticien-dashboard.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\admin_appointments.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\compte-rendu.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\rdv.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dash-patient.js
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\profil.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\login_admin.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\test-endpoint.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\admin.js
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\admin_dashboard.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\index.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\about.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\login.js
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dashboard-medecin.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\symtomes.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\page-document.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\login_admin.js
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\login.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\patient-dashboard.js
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\ordonnance.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\dash-med.js
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\inscription.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Admin\patients.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\rdv_praticien.html
+C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Liste-patient-medecin.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\document.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\Prendre-rdv.html
 C:\Users\Soukouboy\OneDrive\Desktop\3e année\Projet Medicale\MedicalApp.API1\wwwroot\index-style.css
 wwwroot\about.html
+wwwroot\Admin\admin.js
+wwwroot\Admin\admin_appointments.html
+wwwroot\Admin\admin_dashboard.html
+wwwroot\Admin\admin_medecins.html
+wwwroot\Admin\login_admin.html
+wwwroot\Admin\login_admin.js
+wwwroot\Admin\patients.html
 wwwroot\Certificate.pdf
 wwwroot\compte-rendu.html
 wwwroot\contact.html
@@ -41,18 +57,18 @@ wwwroot\icone rdv.png
 wwwroot\index.html
 wwwroot\index-style.css
 wwwroot\inscription.html
+wwwroot\Liste-patient-medecin.html
 wwwroot\login.html
 wwwroot\login.js
 wwwroot\logo.png
 wwwroot\ordonnance.html
-wwwroot\ordonnance.jpeg
-wwwroot\ordonnance-medicale.webp
 wwwroot\page-document.html
 wwwroot\patient-dashboard.js
 wwwroot\praticien-dashboard.js
 wwwroot\Prendre-rdv.html
-wwwroot\prise-rdv.png
 wwwroot\profil.html
 wwwroot\rdv.html
 wwwroot\rdv_praticien.html
 wwwroot\symtomes.html
+wwwroot\test-endpoint.js
+wwwroot\uploads\profilmedical\b8e7a3d4-090f-4af8-9f4b-936357b16230.jpg

@@ -1,4 +1,6 @@
 ﻿using MedicalApp.API1.DTO;
+using MedicalApp.Metier;
+using MedicalApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SqlServer.Server;
 

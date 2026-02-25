@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MedicalApp.Metier;
 
 namespace MedicalApp.API1.DTO
 {

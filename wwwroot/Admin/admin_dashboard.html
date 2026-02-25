@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SmartHealth — Administration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --sidebar:#2f4858; --accent:#23a455; --muted:#9aa7ad; --card:#ffffff; --bg:#f3f7f8;
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+    body{margin:0;background:var(--bg);color:#24323a}
+    .app{display:flex;min-height:100vh}
+    /* Sidebar */
+    .sidebar{width:260px;background:var(--sidebar);color:#e9f7ef;padding:28px 18px;display:flex;flex-direction:column;gap:18px;position:fixed;left:0;top:0;height:100vh;overflow-y:auto;z-index:1000}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;color:#fff}
+    .brand a{color:#fff;text-decoration:none}
+    .brand .logo{width:36px;height:36px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff}
+    .nav{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+    .nav button{color:#cfe9dd;text-decoration:none;padding:10px;border-radius:8px;display:flex;align-items:center;gap:10px;background:var(--sidebar);border:none;cursor:pointer}
+    .nav button.active{background:var(--accent);color:#fff}
+    .logout{margin-top:100%;background:#e55947;color:#fff;border:none;padding:10px;border-radius:8px;width:100%;cursor: pointer;}
+
+    /* Main */
+    .main{flex:1;padding:22px;margin-left:260px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .search{display:flex;align-items:center;gap:8px}
+    .search input{padding:10px 14px;border-radius:8px;border:1px solid #e0e6e7;width:420px}
+    .user{display:flex;align-items:center;gap:10px}
+    .avatar{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid #e2e8ea}
+
+    /* Layout */
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:18px;margin-top:18px}
+    .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(36,50,58,0.06)}
+    .cards-row{display:flex;gap:12px}
+    .stat{flex:1;padding:16px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdfb);border:1px solid #eef6ef}
+    .stat h3{margin:0;font-size:18px;color:var(--accent)}
+    .stat p{margin:8px 0 0;font-weight:700;font-size:20px}
+
+    /* Doctors table */
+    .table{width:100%;border-collapse:collapse;margin-top:12px}
+    .table th, .table td{padding:12px 10px;text-align:left;border-bottom:1px solid #eef2f3}
+    .table th{color:var(--muted);font-weight:600;font-size:13px}
+    .actions button{margin-right:8px}
+    .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#fff}
+    .btn.ghost{background:transparent;border:1px solid #d9e7dd;color:#2f4858}
+    .btn.danger{background:#e75b53;color:#fff}
+
+    /* System supervision */
+    .service{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:8px;border:1px solid #eef2f3;margin-top:8px}
+    .service .ok{color:#1d8a3a;font-weight:700}
+    .service .fail{color:#c53a32;font-weight:700}
+
+    /* Responsive */
+    @media (max-width:1000px){.grid{grid-template-columns:1fr}.sidebar{display:none}.search input{width:220px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div style="margin-top:10px;margin-right:30px;color:#fff;"><h2 style="margin:0;font-size:18px"><a href="/index.html">SmartHealth</a></h2></div></div>
+      <nav class="nav">
+        <button class="active" id="dashboard">Tableau de bord</button>
+        <button id="medecins">Gestion Médecins</button>
+        <button id="patients">Patients</button>
+        <button id="appointments">Rendez-vous</button>
+        <button id="statistics">Statistiques</button>
+        <button id="supervision">Supervision</button>
+        <button id="settings">Paramètres</button>
+      </nav>
+      <button id="logout" class="logout" onclick="logout()">Déconnexion</button>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="search"><input placeholder="Rechercher un médecin, patient ou id..." /> <button class="btn">🔍</button></div>
+        <div class="user"><div class="avatar">👤</div><div><strong id="admin_name">Admin</strong><div style="font-size:12px;color:var(--muted)">Administrateur</div></div></div>
+      </div>
+
+      <h2 style="margin-top:18px">Tableau de bord administrateur</h2>
+
+      <div class="cards-row" style="margin-top:12px">
+        <div class="stat card">
+          <h3>Utilisateurs</h3>
+          <p id="countPatients">12 432</p>
+          <small style="color:var(--muted)">Patients enregistrés</small>
+        </div>
+        <div class="stat card">
+          <h3>Rendez-vous</h3>
+          <p id="countAppointments">3 204</p>
+          <small style="color:var(--muted)">Rendez-vous ce mois</small>
+        </div>
+        <div class="stat card">
+          <h3>Diagnostics</h3>
+          <p id="countDiagnostics">9 820</p>
+          <small style="color:var(--muted)">Analyses réalisées</small>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Left column: Management -->
+        <section>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h3>Gestion des comptes médecin</h3>
+              <div>
+                <button class="btn ghost" onclick="openCreate()">➕ Créer</button>
+                <button class="btn" onclick="refreshTable()">♻️ Actualiser</button>
+              </div>
+            </div>
+
+            <table class="table" id="doctorsTable">
+              <thead>
+                <tr><th>Nom</th><th>Spécialité</th><th>Email</th><th>Téléphone</th><th>Statut</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Dr. Soukouna D.</td>
+                  <td>Neurologue</td>
+                  <td>doc1@smarthealth.com</td>
+                  <td>+212 6xxxxxxx</td>
+                  <td>Actif</td>
+                  <td class="actions"><button class="btn" onclick="editDoctor(this)">✏️</button><button class="btn danger" onclick="deleteDoctor(this)">🗑️</button></td>
+                </tr>
+                <tr>
+                  <td>Dr. Amina R.</td>
+                  <td>Cardiologue</td>
+                  <td>amina.r@smarthealth.com</td>
+                  <td>+212 6xxxxxxx</td>
+                  <td>Actif</td>
+                  <td class="actions"><button class="btn" onclick="editDoctor(this)">✏️</button><button class="btn danger" onclick="deleteDoctor(this)">🗑️</button></td>
+                </tr>
+                <!-- autres lignes générées dynamiquement -->
+              </tbody>
+            </table>
+
+            <div style="margin-top:12px;color:var(--muted)">Utilisez les boutons pour créer, modifier ou supprimer un compte médecin. Les modifications nécessitent une intégration backend pour devenir persistantes.</div>
+          </div>
+
+          <div class="card" style="margin-top:14px">
+            <h3>Logs et événements récents</h3>
+            <ul style="margin:0;padding-left:18px;color:var(--muted)">
+              <li>[12:24] Nouvelle inscription patient (id: P10234)</li>
+              <li>[11:58] Erreur synchronisation RDV (serveur RDV)</li>
+              <li>[10:10] Modification compte médecin: doc1@smarthealth.com</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <script>
+        // Sidebar buttons: toggle .active and persist selection in localStorage
+        document.addEventListener('DOMContentLoaded', function () {
+          const navBtns = document.querySelectorAll('.nav button');
+          if (!navBtns || navBtns.length === 0) return;
+
+          // Restore saved active index
+          const saved = localStorage.getItem('adminActiveNav');
+          if (saved !== null && navBtns[Number(saved)]) {
+            navBtns.forEach(b => b.classList.remove('active'));
+            navBtns[Number(saved)].classList.add('active');
+          }
+
+          // Attach click handlers
+          navBtns.forEach((btn, idx) => {
+            btn.addEventListener('click', function () {
+              navBtns.forEach(b => b.classList.remove('active'));
+              this.classList.add('active');
+              try { localStorage.setItem('adminActiveNav', String(idx)); } catch (e) { /* ignore */ }
+            });
+          });
+        });
+      </script>
+
+        <!-- Right column: Stats & Supervision -->
+        <aside>
+          <div class="card">
+            <h3>Statistiques rapides</h3>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+              <div style="display:flex;justify-content:space-between"><div>Patients actifs</div><div><strong>8 920</strong></div></div>
+              <div style="display:flex;justify-content:space-between"><div>RDV aujourd'hui</div><div><strong>182</strong></div></div>
+              <div style="display:flex;justify-content:space-between"><div>Moy. temps réponse API</div><div><strong>120 ms</strong></div></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Supervision système</h3>
+            <div class="service"><div>Serveur API</div><div class="ok">OK</div></div>
+            <div class="service"><div>Base de données</div><div class="ok">OK</div></div>
+            <div class="service"><div>Service RDV</div><div class="fail">Erreur</div></div>
+            <div class="service"><div>Service Emails</div><div class="ok">OK</div></div>
+            <div style="margin-top:10px;color:var(--muted);font-size:13px">Uptime global: <strong>99.95%</strong></div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Actions rapides</h3>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+              <button class="btn primary">Forcer synchronisation RDV</button>
+              <button class="btn ghost">Exporter statistique (CSV)</button>
+              <button class="btn ghost" onclick="openLogs()">Voir logs détaillés</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+    </main>
+  </div>
+ <script src="admin.js"></script>
+</body>
+</html>
